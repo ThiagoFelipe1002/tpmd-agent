@@ -127,53 +127,78 @@ else:
 # CSS extra condicional: dark mode precisa sobrescrever toolbar do Streamlit
 # que renderiza com base="light" (icons/texto dark por padrão)
 _extra_css = f"""
-    /* Dark: recolor toolbar icons */
-    [data-testid="stHeader"] [data-testid="stToolbar"] button,
-    [data-testid="stHeader"] [data-testid="stToolbar"] a,
-    [data-testid="stStatusWidget"] span,
-    [data-testid="stDecoration"] {{ filter: brightness(0) invert(0.65) !important; }}
-    [data-testid="stHeader"] [data-testid="stToolbar"] button:hover {{
-        filter: brightness(0) invert(1) !important;
-        background: rgba(255,255,255,0.08) !important;
+    /* -- Dark: toolbar icons -- */
+    [data-testid="stHeader"] button,
+    [data-testid="stHeader"] a {{
+        filter: brightness(0) invert(0.7) !important;
     }}
-    /* Dark: main text */
-    p, li, label, .stMarkdown, h1, h2, h3, h4 {{
+    [data-testid="stHeader"] button:hover {{
+        filter: brightness(0) invert(1) !important;
+        background: rgba(255,255,255,0.06) !important;
+    }}
+    /* -- Dark: all text -- */
+    p, li, label, .stMarkdown, h1, h2, h3, h4, span {{
         color: {C['text']} !important;
     }}
-    /* Nuclear: wipe ALL backgrounds inside stBottom */
-    [data-testid="stBottom"] * {{
-        background-color: transparent !important;
-        box-shadow: none !important;
-    }}
+    /* -- Dark: stBottom wrapper only -- */
     [data-testid="stBottom"] {{
         background-color: {C['app_bg']} !important;
+        border-top: 1px solid rgba({C['accent_rgb']},0.12) !important;
     }}
-    [data-testid="stChatInputContainer"],
-    [data-testid="stChatInputContainer"] > div {{
+    [data-testid="stBottom"] > div,
+    [data-testid="stBottom"] > div > div {{
+        background-color: {C['app_bg']} !important;
+        box-shadow: none !important;
+    }}
+    /* -- Dark: input container -- */
+    [data-testid="stChatInputContainer"] {{
         background-color: {C['input_bg']} !important;
-        border: 1.5px solid {C['border']} !important;
+        border: 1.5px solid rgba({C['accent_rgb']},0.35) !important;
         border-radius: 14px !important;
+        box-shadow: 0 0 0 1px rgba({C['accent_rgb']},0.08) !important;
     }}
     [data-testid="stChatInputContainer"]:focus-within {{
         border-color: {C['accent']} !important;
-        box-shadow: 0 0 0 3px rgba({C['accent_rgb']},0.15), 0 0 20px rgba({C['accent_rgb']},0.25) !important;
+        box-shadow: 0 0 0 3px rgba({C['accent_rgb']},0.15),
+                    0 0 24px rgba({C['accent_rgb']},0.18) !important;
     }}
-    textarea, [data-testid="stChatInputTextArea"] {{
+    [data-testid="stChatInputContainer"] > div {{
+        background-color: {C['input_bg']} !important;
+    }}
+    /* -- Dark: textarea -- */
+    textarea {{
         background-color: {C['input_bg']} !important;
         color: {C['text']} !important;
         caret-color: {C['accent']} !important;
     }}
+    /* -- Dark: submit button -- */
     [data-testid="stChatInputSubmitButton"] button {{
         background-color: {C['accent']} !important;
-        color: #fff !important;
         border: none !important;
         border-radius: 8px !important;
-        box-shadow: 0 0 12px rgba({C['accent_rgb']},0.6), 0 0 24px rgba({C['accent_rgb']},0.3) !important;
+        box-shadow: 0 0 10px rgba({C['accent_rgb']},0.5),
+                    0 0 20px rgba({C['accent_rgb']},0.25) !important;
     }}
-    [data-testid="stChatInputSubmitButton"] button svg {{
-        fill: #ffffff !important;
-        color: #ffffff !important;
-        stroke: #ffffff !important;
+    [data-testid="stChatInputSubmitButton"] button * {{
+        color: #fff !important;
+        fill: #fff !important;
+        stroke: #fff !important;
+    }}
+    /* -- Dark: all buttons (sidebar + main) -- */
+    [data-testid="stSidebar"] {{
+        background-color: {C['sidebar_bg']} !important;
+    }}
+    [data-testid="stSidebar"] button,
+    .stButton button {{
+        background-color: {C['btn_bg']} !important;
+        border: 1px solid {C['btn_brd']} !important;
+        color: {C['btn_txt']} !important;
+    }}
+    [data-testid="stSidebar"] button:hover,
+    .stButton button:hover {{
+        background-color: rgba({C['accent_rgb']},0.18) !important;
+        border-color: {C['accent']} !important;
+        box-shadow: 0 0 10px rgba({C['accent_rgb']},0.2) !important;
     }}
 """ if _dark else """"""
 
@@ -254,7 +279,7 @@ st.markdown(f"""
         box-shadow: none !important;
     }}
     textarea::placeholder {{ color: {C['text_muted']} !important; }}
-    /* Base chat input container - overridden more aggressively in dark mode via _extra_css */
+    /* Base chat input container */
     .stChatInputContainer {{
         background: {C['input_bg']} !important;
         border: 1.5px solid {C['border']} !important;
@@ -264,18 +289,19 @@ st.markdown(f"""
     }}
     .stChatInputContainer:focus-within {{
         border-color: {C['accent']} !important;
-        box-shadow: 0 0 0 3px rgba({C['accent_rgb']},0.12), 0 0 20px rgba({C['accent_rgb']},0.15) !important;
+        box-shadow: 0 0 0 3px rgba({C['accent_rgb']},0.12),
+                    0 0 20px rgba({C['accent_rgb']},0.15) !important;
     }}
     [data-testid="stChatInputSubmitButton"] button {{
         background: {C['accent']} !important;
         color: #ffffff !important;
         border: none !important;
         border-radius: 8px !important;
-        box-shadow: 0 0 12px rgba({C['accent_rgb']},0.5), 0 0 24px rgba({C['accent_rgb']},0.2) !important;
+        box-shadow: 0 0 10px rgba({C['accent_rgb']},0.5),
+                    0 0 20px rgba({C['accent_rgb']},0.2) !important;
     }}
     [data-testid="stChatInputSubmitButton"] button svg {{
         fill: #ffffff !important;
-        color: #ffffff !important;
         stroke: #ffffff !important;
     }}
     .sidebar-card {{
@@ -302,14 +328,15 @@ st.markdown(f"""
         font-size: 0.68rem; color: {C['text_muted']}; opacity: 0.6;
         padding-top: 0.5rem; border-top: 1px solid {C['divider']};
     }}
-    .stButton > button {{
+    .stButton button {{
         background: {C['btn_bg']} !important;
         border: 1px solid {C['btn_brd']} !important;
         color: {C['btn_txt']} !important;
         border-radius: 8px !important; font-weight: 500 !important;
         white-space: nowrap !important;
+        transition: all 0.15s ease !important;
     }}
-    .stButton > button:hover {{
+    .stButton button:hover {{
         background: rgba({C['accent_rgb']},0.15) !important;
         border-color: {C['accent']} !important;
     }}
@@ -324,7 +351,7 @@ st.markdown(f"""
 <div class="hero">
     <div class="hero-left">
         <div class="hero-icon-wrap">
-            <img src="{ICON_URI}" width="48" height="48" alt="TrafegoAI icon"/>
+            <img src="{ICON_URI}" width="44" height="44" alt="TrafegoAI icon"/>
         </div>
         <div class="hero-text-col">
             <div class="hero-title">TrafegoAI</div>
