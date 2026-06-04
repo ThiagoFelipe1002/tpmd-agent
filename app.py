@@ -124,6 +124,23 @@ else:
         next_theme   = "dark",
     )
 
+# CSS extra condicional: dark mode precisa sobrescrever toolbar do Streamlit
+# que renderiza com base="light" (icons/texto dark por padrão)
+_extra_css = f"""
+    /* Dark mode: recolor Streamlit toolbar so icons/text are visible */
+    [data-testid="stHeader"] [data-testid="stToolbar"] button,
+    [data-testid="stHeader"] [data-testid="stToolbar"] a,
+    [data-testid="stStatusWidget"] span,
+    [data-testid="stDecoration"] {{ filter: brightness(0) invert(0.65) !important; }}
+    [data-testid="stHeader"] [data-testid="stToolbar"] button:hover {{
+        filter: brightness(0) invert(1) !important; background: rgba(255,255,255,0.08) !important;
+    }}
+    /* Dark mode: text in the main content area */
+    p, li, span, label, .stMarkdown, h1, h2, h3, h4 {{
+        color: {C['text']} !important;
+    }}
+""" if _dark else ""
+
 st.markdown(f"""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
@@ -251,6 +268,7 @@ st.markdown(f"""
     hr {{ border-color: {C['divider']} !important; }}
     ::-webkit-scrollbar {{ width: 5px; }}
     ::-webkit-scrollbar-thumb {{ background: rgba({C['accent_rgb']},0.25); border-radius: 3px; }}
+{_extra_css}
 </style>
 """, unsafe_allow_html=True)
 
@@ -411,7 +429,7 @@ with st.sidebar:
 
     st.divider()
 
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns([3, 2])
     with col1:
         if st.button(f"{C['theme_icon']} {C['theme_label']}", use_container_width=True):
             st.session_state.theme = C['next_theme']
