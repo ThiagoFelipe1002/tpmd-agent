@@ -82,7 +82,7 @@ st.markdown(
             align-items: center;
             justify-content: space-between;
             padding: 1.4rem 0 1.2rem 0;
-            border-bottom: 1px solid rgba(59,130,246,0.18);
+            border-bottom: 1px solid rgba(128,128,128,0.15);
             margin-bottom: 2rem;
         }}
         .hero-left {{
@@ -102,27 +102,25 @@ st.markdown(
             font-size: 1.9rem;
             font-weight: 800;
             letter-spacing: -0.8px;
-            background: linear-gradient(90deg, #2563EB 0%, #3B82F6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--primary-color);
             line-height: 1.1;
         }}
         .hero-subtitle {{
             font-size: 0.85rem;
-            opacity: 0.45;
+            color: var(--text-color);
+            opacity: 0.5;
             letter-spacing: 0.3px;
         }}
         .status-badge {{
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: rgba(34,139,69,0.1);
-            border: 1px solid rgba(34,139,69,0.25);
+            background: rgba(34,197,94,0.1);
+            border: 1px solid rgba(34,197,94,0.3);
             border-radius: 20px;
             padding: 4px 12px;
             font-size: 0.72rem;
-            color: #166534;
+            color: #15803d;
             font-weight: 500;
         }}
         .status-dot {{
@@ -139,18 +137,18 @@ st.markdown(
 
         /* Chat */
         .stChatInputContainer {{
-            border: 1px solid rgba(59,130,246,0.25) !important;
+            border: 1px solid rgba(128,128,128,0.2) !important;
             border-radius: 12px !important;
         }}
         .stChatInputContainer:focus-within {{
-            border-color: rgba(59,130,246,0.5) !important;
-            box-shadow: 0 0 0 3px rgba(59,130,246,0.08) !important;
+            border-color: var(--primary-color) !important;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.1) !important;
         }}
 
         /* Sidebar */
         .sidebar-card {{
-            background: rgba(59,130,246,0.04);
-            border: 1px solid rgba(59,130,246,0.14);
+            background: var(--secondary-background-color);
+            border: 1px solid rgba(128,128,128,0.12);
             border-radius: 10px;
             padding: 0.9rem;
         }}
@@ -160,14 +158,12 @@ st.markdown(
             gap: 8px;
             font-size: 1rem;
             font-weight: 700;
-            background: linear-gradient(90deg, #2563EB, #3B82F6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--primary-color);
             margin-bottom: 0.4rem;
         }}
         .sidebar-desc {{
             font-size: 0.78rem;
+            color: var(--text-color);
             opacity: 0.5;
             line-height: 1.6;
         }}
@@ -178,74 +174,23 @@ st.markdown(
             gap: 4px;
         }}
         .sidebar-tag {{
-            background: rgba(59,130,246,0.08);
-            border: 1px solid rgba(59,130,246,0.2);
+            background: rgba(128,128,128,0.08);
+            border: 1px solid rgba(128,128,128,0.18);
             border-radius: 5px;
             padding: 2px 7px;
             font-size: 0.68rem;
-            color: #1d4ed8;
+            color: var(--primary-color);
         }}
         .sidebar-dev {{
             font-size: 0.7rem;
+            color: var(--text-color);
             opacity: 0.3;
             margin-top: 0.7rem;
             padding-top: 0.5rem;
-            border-top: 1px solid rgba(128,128,128,0.15);
+            border-top: 1px solid rgba(128,128,128,0.1);
         }}
         .stButton > button {{
             border-radius: 8px !important;
-        }}
-
-        /* Dark mode */
-        @media (prefers-color-scheme: dark) {{
-            .stApp {{
-                background: linear-gradient(135deg, #0a0a0f 0%, #0d1117 50%, #080d14 100%) !important;
-            }}
-            [data-testid="stHeader"] {{
-                background-color: #0a0a0f !important;
-                border-bottom: 1px solid rgba(99,179,237,0.07) !important;
-            }}
-            [data-testid="stBottom"], [data-testid="stBottom"] > div {{
-                background-color: #0d1117 !important;
-                border-top: 1px solid rgba(99,179,237,0.08) !important;
-            }}
-            [data-testid="stSidebar"] {{
-                background: rgba(8,13,20,0.98) !important;
-                border-right: 1px solid rgba(99,179,237,0.07) !important;
-            }}
-            .stChatInputContainer {{
-                background: rgba(10,15,25,0.9) !important;
-            }}
-            .hero-title {{
-                background: linear-gradient(90deg, #63B3ED 0%, #BEE3F8 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-            }}
-            .sidebar-logo {{
-                background: linear-gradient(90deg, #63B3ED, #BEE3F8);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-            }}
-            .sidebar-tag {{
-                background: rgba(99,179,237,0.08);
-                border: 1px solid rgba(99,179,237,0.18);
-                color: #90CDF4;
-            }}
-            .status-badge {{
-                background: rgba(72,187,120,0.08);
-                border: 1px solid rgba(72,187,120,0.2);
-                color: #68D391;
-            }}
-            .status-dot {{
-                background: #68D391;
-                box-shadow: 0 0 6px #68D391;
-            }}
-            ::-webkit-scrollbar {{ width: 6px; height: 6px; }}
-            ::-webkit-scrollbar-track {{ background: #0d1117; }}
-            ::-webkit-scrollbar-thumb {{ background: rgba(99,179,237,0.2); border-radius: 3px; }}
-            ::-webkit-scrollbar-thumb:hover {{ background: rgba(99,179,237,0.35); }}
         }}
     </style>
 
