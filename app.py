@@ -418,29 +418,59 @@ _inject_css = f"""\
   fill: #fff !important;
   stroke: #fff !important;
 }}
-/* Main menu popover */
+/* Main menu popover — cover every layer including the inner white div */
 [data-testid="stMainMenuPopover"],
-[data-testid="stMainMenuPopover"] ul,
-[data-baseweb="popover"] [role="listbox"],
-[data-baseweb="menu"] {{
+[data-testid="stMainMenuPopover"] > div,
+[data-testid="stMainMenuPopover"] > div > div {{
   background-color: {C['card_bg']} !important;
-  border: 1px solid {C['border']} !important;
-  border-radius: 10px !important;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.55) !important;
 }}
-[data-testid="stMainMenuPopover"] li,
-[data-testid="stMainMenuPopover"] button,
+[data-testid="stMainMenuPopover"] {{
+  border: 1px solid rgba({C['accent_rgb']},0.2) !important;
+  padding: 4px 0 !important;
+  overflow: hidden !important;
+}}
+/* list background */
+[data-testid="stMainMenuList"] {{
+  background-color: {C['card_bg']} !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 4px 0 !important;
+}}
+/* each item row */
+[data-testid="stMainMenuPopover"] [role="option"] {{
+  background-color: transparent !important;
+  border-radius: 6px !important;
+  margin: 1px 6px !important;
+}}
+[data-testid="stMainMenuPopover"] [role="option"]:hover {{
+  background-color: rgba({C['accent_rgb']},0.12) !important;
+}}
+/* text inside items */
 [data-testid="stMainMenuPopover"] span,
-[data-testid="stMainMenuPopover"] a,
-[data-baseweb="menu"] li,
-[data-baseweb="menu"] [role="option"] {{
+[data-testid="stMainMenuPopover"] li {{
   color: {C['text']} !important;
+  font-size: 0.85rem !important;
   background-color: transparent !important;
 }}
-[data-testid="stMainMenuPopover"] li:hover,
-[data-baseweb="menu"] [role="option"]:hover {{
-  background-color: rgba({C['accent_rgb']},0.1) !important;
-  color: {C['accent']} !important;
+/* text inside items — normal weight */
+[data-testid="stMainMenuPopover"] [role="option"] li {{
+  font-weight: 400 !important;
+  font-size: 0.85rem !important;
+}}
+/* divider */
+[data-testid="stMainMenuDivider"] {{
+  border-top: 1px solid rgba({C['accent_rgb']},0.12) !important;
+  margin: 4px 12px !important;
+  height: 0 !important;
+  background: none !important;
+}}
+/* keyboard shortcut label */
+[data-testid="stMainMenuPopover"] span[class*="rj14pv"] {{
+  color: {C['text_muted']} !important;
+  opacity: 0.6 !important;
+  font-size: 0.72rem !important;
 }}
 """ if _dark else ""
 
