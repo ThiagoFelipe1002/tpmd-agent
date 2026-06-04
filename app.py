@@ -298,29 +298,26 @@ st.markdown(f"""
         box-shadow: 0 0 0 3px rgba({C['accent_rgb']},0.15),
                     0 0 22px rgba({C['accent_rgb']},0.2) !important;
     }}
-    [data-testid="stChatInputSubmitButton"] button {{
-        background: linear-gradient(135deg, {C['accent']}, #60a5fa) !important;
-        color: #ffffff !important;
+    button[data-testid="stChatInputSubmitButton"] {{
+        background: transparent !important;
         border: none !important;
-        border-radius: 10px !important;
-        box-shadow: 0 0 14px rgba({C['accent_rgb']},0.7),
-                    0 0 30px rgba({C['accent_rgb']},0.35) !important;
-        transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+        border-radius: 8px !important;
+        box-shadow: none !important;
+        color: {C['accent']} !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        transition: color 0.15s ease, filter 0.15s ease !important;
     }}
-    [data-testid="stChatInputSubmitButton"] button:hover {{
-        transform: scale(1.08) !important;
-        box-shadow: 0 0 20px rgba({C['accent_rgb']},0.9),
-                    0 0 40px rgba({C['accent_rgb']},0.5) !important;
+    button[data-testid="stChatInputSubmitButton"]:hover {{
+        color: #93c5fd !important;
+        filter: drop-shadow(0 0 6px rgba({C['accent_rgb']},0.7)) !important;
     }}
-    [data-testid="stChatInputSubmitButton"] button svg,
-    [data-testid="stChatInputSubmitButton"] button svg *,
-    [data-testid="stChatInputSubmitButton"] button svg path,
-    [data-testid="stChatInputSubmitButton"] button svg polyline,
-    [data-testid="stChatInputSubmitButton"] button svg polygon,
-    [data-testid="stChatInputSubmitButton"] button svg circle {{
-        fill: #ffffff !important;
-        stroke: #ffffff !important;
-        color: #ffffff !important;
+    button[data-testid="stChatInputSubmitButton"] svg {{
+        fill: currentColor !important;
+        stroke: currentColor !important;
+        width: 20px !important;
+        height: 20px !important;
     }}
     .sidebar-card {{
         background: {C['card_bg']};
@@ -370,8 +367,11 @@ st.markdown(f"""
 # This is the only reliable way to override Emotion/Streamlit generated CSS
 # ---------------------------------------------------------------------------
 _inject_css = f"""\
-[data-testid="stBottom"],
-[data-testid="stBottom"] * {{
+[data-testid="stBottom"] {{
+  background-color: {C['app_bg']} !important;
+}}
+/* reset all divs inside stBottom, but NOT buttons/svg/img */
+[data-testid="stBottom"] div {{
   background-color: {C['app_bg']} !important;
   box-shadow: none !important;
 }}
@@ -386,7 +386,7 @@ _inject_css = f"""\
   box-shadow: 0 0 0 3px rgba({C['accent_rgb']},0.18),
               0 0 24px rgba({C['accent_rgb']},0.22) !important;
 }}
-[data-testid="stBottom"] [data-testid="stChatInput"] > div > * {{
+[data-testid="stBottom"] [data-testid="stChatInput"] > div > div {{
   background-color: {C['input_bg']} !important;
 }}
 [data-testid="stChatInputTextArea"] {{
@@ -397,26 +397,27 @@ _inject_css = f"""\
   color: {C['text']} !important;
   caret-color: {C['accent']} !important;
 }}
-[data-testid="stBottom"] [data-testid="stChatInputSubmitButton"] button {{
-  background: linear-gradient(135deg, {C['accent']}, #60a5fa) !important;
+/* submit button: transparent bg, blue arrow only */
+button[data-testid="stChatInputSubmitButton"] {{
+  background: transparent !important;
   border: none !important;
-  border-radius: 10px !important;
-  box-shadow: 0 0 14px rgba({C['accent_rgb']},0.7),0 0 30px rgba({C['accent_rgb']},0.35) !important;
-  transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+  color: {C['accent']} !important;
+  transition: color 0.15s ease, filter 0.15s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }}
-[data-testid="stBottom"] [data-testid="stChatInputSubmitButton"] button:hover {{
-  transform: scale(1.08) !important;
-  box-shadow: 0 0 20px rgba({C['accent_rgb']},0.9),0 0 40px rgba({C['accent_rgb']},0.5) !important;
+button[data-testid="stChatInputSubmitButton"]:hover {{
+  color: #93c5fd !important;
+  filter: drop-shadow(0 0 6px rgba({C['accent_rgb']},0.7)) !important;
 }}
-[data-testid="stBottom"] [data-testid="stChatInputSubmitButton"] button *,
-[data-testid="stBottom"] [data-testid="stChatInputSubmitButton"] button svg,
-[data-testid="stBottom"] [data-testid="stChatInputSubmitButton"] button svg path,
-[data-testid="stBottom"] [data-testid="stChatInputSubmitButton"] button svg polyline,
-[data-testid="stBottom"] [data-testid="stChatInputSubmitButton"] button svg circle {{
-  background-color: transparent !important;
-  color: #fff !important;
-  fill: #fff !important;
-  stroke: #fff !important;
+button[data-testid="stChatInputSubmitButton"] svg {{
+  fill: currentColor !important;
+  stroke: currentColor !important;
+  width: 20px !important;
+  height: 20px !important;
 }}
 /* Main menu popover — cover every layer including the inner white div */
 [data-testid="stMainMenuPopover"],
