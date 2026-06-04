@@ -292,11 +292,20 @@ st.markdown(f"""
         border: 1.5px solid rgba({C['accent_rgb']},0.5) !important;
         border-radius: 14px !important;
         box-shadow: none !important;
+        overflow: hidden !important;
     }}
     [data-testid="stChatInput"] > div:focus-within {{
         border-color: {C['accent']} !important;
         box-shadow: 0 0 0 3px rgba({C['accent_rgb']},0.15),
                     0 0 22px rgba({C['accent_rgb']},0.2) !important;
+    }}
+    /* button wrapper: page bg so arrow appears to float outside the text field */
+    [data-testid="stChatInput"] > div > div:has(button) {{
+        background: {C['app_bg']} !important;
+        border-radius: 0 10px 10px 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        padding-right: 6px !important;
     }}
     button[data-testid="stChatInputSubmitButton"] {{
         background: transparent !important;
@@ -389,9 +398,13 @@ _inject_css = f"""\
 [data-testid="stBottom"] [data-testid="stChatInput"] > div > div {{
   background-color: {C['input_bg']} !important;
 }}
-/* wrapper que contém o botão deve ser transparente */
+/* wrapper do botão: usa cor da página, cria efeito de "slot" visual */
 [data-testid="stBottom"] [data-testid="stChatInput"] > div > div:has(button) {{
-  background-color: transparent !important;
+  background-color: {C['app_bg']} !important;
+  border-radius: 0 10px 10px 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  padding-right: 6px !important;
 }}
 [data-testid="stChatInputTextArea"] {{
   padding: 0.65rem 1rem !important;
