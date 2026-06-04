@@ -162,7 +162,7 @@ with st.sidebar:
     st.markdown(
         """
         **TrafegoAI** é um agente de inteligência artificial
-        especializado em tráfego pago — Facebook Ads, Google Ads
+        especializado em tráfego pago: Facebook Ads, Google Ads
         e estratégias de performance.
 
         **Desenvolvido por:**  
