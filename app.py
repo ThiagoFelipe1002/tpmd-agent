@@ -151,20 +151,20 @@ st.markdown(f"""
         border-bottom: 1px solid {C['border']};
         margin-bottom: 1.8rem;
     }}
-    .hero-left {{ display: flex; flex-direction: column; gap: 4px; }}
-    .hero-title-row {{ display: flex; align-items: center; gap: 14px; }}
-    .hero-icon-wrap {{ flex-shrink: 0; width: 48px; height: 48px; line-height: 0; overflow: visible; }}
+    .hero-left {{ display: flex; flex-direction: row; align-items: center; gap: 14px; }}
+    .hero-text-col {{ display: flex; flex-direction: column; gap: 3px; }}
+    .hero-icon-wrap {{ flex-shrink: 0; width: 48px; height: 48px; line-height: 0; }}
     .hero-icon-wrap img {{
         width: 48px !important; height: 48px !important;
         min-width: 48px !important; min-height: 48px !important;
-        display: block !important;
+        display: block !important; border-radius: 12px !important;
     }}
     .hero-title {{
         font-size: 1.85rem; font-weight: 800; letter-spacing: -0.8px; line-height: 1.1;
         background: {C['title_grad']};
         -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }}
-    .hero-subtitle {{ font-size: 0.82rem; color: {C['text_muted']}; padding-left: 62px; }}
+    .hero-subtitle {{ font-size: 0.82rem; color: {C['text_muted']}; }}
     .status-badge {{
         display: inline-flex; align-items: center; gap: 7px;
         background: {C['status_bg']}; border: 1px solid {C['status_brd']};
@@ -191,12 +191,15 @@ st.markdown(f"""
     [data-testid="stChatMessage"] span {{
         color: {C['text']} !important;
     }}
-    [data-testid="stChatInput"], textarea {{
+    [data-testid="stChatInput"], textarea,
+    [data-testid="stChatInputTextArea"], .stChatInput textarea {{
         background: {C['input_bg']} !important;
         color: {C['text']} !important;
+        caret-color: {C['accent']} !important;
     }}
     textarea::placeholder {{ color: {C['text_muted']} !important; }}
-    .stChatInputContainer {{
+    .stChatInputContainer, [data-testid="stChatInputContainer"],
+    [data-testid="stBottom"] .stChatInputContainer {{
         background: {C['input_bg']} !important;
         border: 1px solid {C['border']} !important;
         border-radius: 14px !important;
@@ -205,6 +208,10 @@ st.markdown(f"""
     .stChatInputContainer:focus-within {{
         border-color: {C['accent']} !important;
         box-shadow: 0 0 0 3px rgba({C['accent_rgb']},0.12) !important;
+    }}
+    [data-testid="stChatInputSubmitButton"] button {{
+        background: {C['accent']} !important;
+        color: #ffffff !important;
     }}
     .sidebar-card {{
         background: {C['card_bg']};
@@ -235,6 +242,7 @@ st.markdown(f"""
         border: 1px solid {C['btn_brd']} !important;
         color: {C['btn_txt']} !important;
         border-radius: 8px !important; font-weight: 500 !important;
+        white-space: nowrap !important;
     }}
     .stButton > button:hover {{
         background: rgba({C['accent_rgb']},0.15) !important;
@@ -249,13 +257,13 @@ st.markdown(f"""
 st.markdown(f"""
 <div class="hero">
     <div class="hero-left">
-        <div class="hero-title-row">
-            <div class="hero-icon-wrap">
-                <img src="{ICON_URI}" width="48" height="48" alt="TrafegoAI icon"/>
-            </div>
-            <div class="hero-title">TrafegoAI</div>
+        <div class="hero-icon-wrap">
+            <img src="{ICON_URI}" width="48" height="48" alt="TrafegoAI icon"/>
         </div>
-        <div class="hero-subtitle">Seu mentor de tr&aacute;fego pago</div>
+        <div class="hero-text-col">
+            <div class="hero-title">TrafegoAI</div>
+            <div class="hero-subtitle">Seu mentor de tr&aacute;fego pago</div>
+        </div>
     </div>
     <div class="status-badge">
         <div class="status-dot"></div>
