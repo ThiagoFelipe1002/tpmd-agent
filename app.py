@@ -146,9 +146,12 @@ _extra_css = f"""
         border-top: 1px solid rgba({C['accent_rgb']},0.12) !important;
     }}
     [data-testid="stBottom"] > div,
-    [data-testid="stBottom"] > div > div {{
+    [data-testid="stBottom"] > div > div,
+    [data-testid="stBottom"] > div > div > div,
+    [data-testid="stBottom"] > div > div > div > div {{
         background-color: {C['app_bg']} !important;
         box-shadow: none !important;
+        border: none !important;
     }}
     /* -- Dark: input container -- */
     [data-testid="stChatInputContainer"] {{
@@ -231,11 +234,12 @@ st.markdown(f"""
     }}
     .hero-left {{ display: flex; flex-direction: row; align-items: center; gap: 14px; }}
     .hero-text-col {{ display: flex; flex-direction: column; gap: 2px; }}
-    .hero-icon-wrap {{ flex-shrink: 0; width: 44px; height: 44px; line-height: 0; }}
+    .hero-icon-wrap {{ flex-shrink: 0; width: 44px; height: 44px; line-height: 0; overflow: visible !important; }}
     .hero-icon-wrap img {{
         width: 44px !important; height: 44px !important;
         min-width: 44px !important; min-height: 44px !important;
         display: block !important; border-radius: 10px !important;
+        object-fit: contain !important; overflow: visible !important;
     }}
     .hero-title {{
         font-size: 1.6rem; font-weight: 800; letter-spacing: -0.6px; line-height: 1.1;
