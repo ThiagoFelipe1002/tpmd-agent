@@ -139,7 +139,37 @@ _extra_css = f"""
     p, li, span, label, .stMarkdown, h1, h2, h3, h4 {{
         color: {C['text']} !important;
     }}
-""" if _dark else ""
+    /* Dark mode: nuke all white backgrounds in the bottom bar */
+    [data-testid="stBottom"],
+    [data-testid="stBottom"] > div,
+    [data-testid="stBottom"] > div > div,
+    [data-testid="stBottom"] > div > div > div,
+    [data-testid="stBottom"] > div > div > div > div {{
+        background: {C['app_bg']} !important;
+        box-shadow: none !important;
+        border: none !important;
+    }}
+    /* Dark mode: the actual chat input frame */
+    [data-testid="stChatInputContainer"],
+    div[class*="stChatInput"] {{
+        background: {C['input_bg']} !important;
+        border: 1px solid {C['border']} !important;
+        border-radius: 14px !important;
+        box-shadow: 0 0 0 1px {C['border']} !important;
+        outline: none !important;
+    }}
+    [data-testid="stChatInputContainer"]:focus-within,
+    div[class*="stChatInput"]:focus-within {{
+        border-color: {C['accent']} !important;
+        box-shadow: 0 0 0 2px rgba({C['accent_rgb']},0.25) !important;
+    }}
+    /* Dark mode: submit button */
+    [data-testid="stChatInputSubmitButton"] button {{
+        background: {C['accent']} !important;
+        color: #fff !important;
+        border: none !important;
+    }}
+""" if _dark else """"""
 
 st.markdown(f"""
 <style>
@@ -213,14 +243,18 @@ st.markdown(f"""
         background: {C['input_bg']} !important;
         color: {C['text']} !important;
         caret-color: {C['accent']} !important;
+        border: none !important;
+        outline: none !important;
+        box-shadow: none !important;
     }}
     textarea::placeholder {{ color: {C['text_muted']} !important; }}
-    .stChatInputContainer, [data-testid="stChatInputContainer"],
-    [data-testid="stBottom"] .stChatInputContainer {{
+    /* Base chat input container - overridden more aggressively in dark mode via _extra_css */
+    .stChatInputContainer {{
         background: {C['input_bg']} !important;
-        border: 1px solid {C['border']} !important;
+        border: 1.5px solid {C['border']} !important;
         border-radius: 14px !important;
-        box-shadow: {C['shadow']} !important;
+        box-shadow: none !important;
+        overflow: hidden !important;
     }}
     .stChatInputContainer:focus-within {{
         border-color: {C['accent']} !important;
@@ -229,6 +263,8 @@ st.markdown(f"""
     [data-testid="stChatInputSubmitButton"] button {{
         background: {C['accent']} !important;
         color: #ffffff !important;
+        border: none !important;
+        border-radius: 8px !important;
     }}
     .sidebar-card {{
         background: {C['card_bg']};
