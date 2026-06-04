@@ -1,5 +1,5 @@
 """
-Interface Streamlit do TrafegoAI - Agente RAG de Tráfego Pago.
+Interface Streamlit do TráfegoAI - Agente RAG de Tráfego Pago.
 
 Uso:
     streamlit run app.py
@@ -21,21 +21,21 @@ from langchain_core.messages import HumanMessage, AIMessage
 _SVG_ICON = """<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="tai-bg" x1="0" y1="48" x2="48" y2="0" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#1e3a8a" stop-opacity="0.5"/>
-      <stop offset="100%" stop-color="#1d4ed8" stop-opacity="0.2"/>
+      <stop offset="0%" stop-color="#1e3a8a" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#1d4ed8" stop-opacity="0.22"/>
     </linearGradient>
     <linearGradient id="tai-bd" x1="0" y1="48" x2="48" y2="0" gradientUnits="userSpaceOnUse">
       <stop offset="0%" stop-color="#3b82f6"/>
       <stop offset="100%" stop-color="#93c5fd"/>
     </linearGradient>
-    <linearGradient id="tai-ar" x1="8" y1="36" x2="40" y2="12" gradientUnits="userSpaceOnUse">
+    <linearGradient id="tai-ar" x1="10" y1="36" x2="38" y2="12" gradientUnits="userSpaceOnUse">
       <stop offset="0%" stop-color="#3b82f6"/>
       <stop offset="100%" stop-color="#bae6fd"/>
     </linearGradient>
   </defs>
-  <rect x="2" y="2" width="44" height="44" rx="12" fill="url(#tai-bg)" stroke="url(#tai-bd)" stroke-width="1.5"/>
-  <polyline points="9,35 18,24 25,29 36,16" stroke="url(#tai-ar)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-  <polyline points="30,13 37,16 34,23" stroke="url(#tai-ar)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <rect x="2" y="2" width="44" height="44" rx="13" fill="url(#tai-bg)" stroke="url(#tai-bd)" stroke-width="1.5"/>
+  <polyline points="10,36 19,26 27,30 38,13" stroke="url(#tai-ar)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <circle cx="38" cy="13" r="2.5" fill="#bae6fd"/>
 </svg>"""
 ICON_URI = "data:image/svg+xml;base64," + base64.b64encode(_SVG_ICON.encode()).decode()
 
@@ -59,7 +59,7 @@ def _secret(key: str, default: str | None = None) -> str | None:
 # Configuração da página
 # ---------------------------------------------------------------------------
 st.set_page_config(
-    page_title="TrafegoAI",
+    page_title="TráfegoAI",
     page_icon="📈",
     layout="wide",
 )
@@ -146,17 +146,24 @@ _extra_css = f"""
         background-color: {C['app_bg']} !important;
         border-top: 1px solid rgba({C['accent_rgb']},0.12) !important;
     }}
-    /* descendant * keeps app_bg on ALL wrappers */
-    [data-testid="stBottom"] div {{
+    /* Only paint direct wrappers of stBottom, not every nested div */
+    [data-testid="stBottom"] > div {{
         background-color: {C['app_bg']} !important;
         box-shadow: none !important;
     }}
-    /* chat input visual box */
-    [data-testid="stBottom"] [data-testid="stChatInput"] > div {{
-        background-color: {C['input_bg']} !important;
-        border: 1.5px solid rgba({C['accent_rgb']},0.5) !important;
-        border-radius: 14px !important;
+    /* Inner divs of stChatInput: transparent (prevents color patches) */
+    [data-testid="stBottom"] [data-testid="stChatInput"] div {{
+        background: transparent !important;
         box-shadow: none !important;
+    }}
+    /* Chat input visual box: only the outer container gets the background */
+    [data-testid="stBottom"] [data-testid="stChatInput"] > div {{
+        background: {C['input_bg']} !important;
+        border: 1.5px solid rgba({C['accent_rgb']},0.55) !important;
+        border-radius: 16px !important;
+        box-shadow: none !important;
+        overflow: hidden !important;
+        background-clip: padding-box !important;
     }}
     [data-testid="stBottom"] [data-testid="stChatInput"] > div:focus-within {{
         border-color: {C['accent']} !important;
@@ -169,22 +176,21 @@ _extra_css = f"""
     }}
     /* specificity (0,1,1) for textarea inside bottom */
     [data-testid="stBottom"] textarea {{
-        background-color: {C['input_bg']} !important;
+        background-color: transparent !important;
         color: {C['text']} !important;
         caret-color: {C['accent']} !important;
     }}
-    /* specificity (0,2,1) for submit button */
+    /* submit button: transparent, arrow only */
     [data-testid="stBottom"] [data-testid="stChatInputSubmitButton"] button {{
-        background-color: {C['accent']} !important;
+        background: transparent !important;
         border: none !important;
-        border-radius: 8px !important;
-        box-shadow: 0 0 10px rgba({C['accent_rgb']},0.55),
-                    0 0 20px rgba({C['accent_rgb']},0.28) !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
     }}
     [data-testid="stBottom"] [data-testid="stChatInputSubmitButton"] button * {{
-        color: #fff !important;
-        fill: #fff !important;
-        stroke: #fff !important;
+        color: {C['accent']} !important;
+        fill: {C['accent']} !important;
+        stroke: {C['accent']} !important;
     }}
     /* -- Dark: all buttons (sidebar + main) -- */
     [data-testid="stSidebar"] {{
@@ -282,35 +288,35 @@ st.markdown(f"""
         box-shadow: none !important;
     }}
     textarea::placeholder {{ color: {C['text_muted']} !important; }}
-    /* textarea padding */
+    /* textarea: transparent — container is the visual field */
     [data-testid="stChatInputTextArea"] {{
-        padding: 0.65rem 1rem !important;
+        padding: 0.65rem 3.5rem 0.65rem 1rem !important;
+        background: transparent !important;
+        border: none !important;
+        border-radius: 0 !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+        color: {C['text']} !important;
+        caret-color: {C['accent']} !important;
+        outline: none !important;
+        box-shadow: none !important;
     }}
-    /* Chat input visual box */
+    /* Chat input outer container: visual field with border */
     [data-testid="stChatInput"] > div {{
         background: {C['input_bg']} !important;
         border: 1.5px solid rgba({C['accent_rgb']},0.5) !important;
-        border-radius: 14px !important;
+        border-radius: 16px !important;
         box-shadow: none !important;
-        overflow: hidden !important;
     }}
-    [data-testid="stChatInput"] > div:focus-within {{
-        border-color: {C['accent']} !important;
-        box-shadow: 0 0 0 3px rgba({C['accent_rgb']},0.15),
-                    0 0 22px rgba({C['accent_rgb']},0.2) !important;
-    }}
-    /* button wrapper: page bg so arrow appears to float outside the text field */
+    /* button wrapper e container filhos: transparentes */
     [data-testid="stChatInput"] > div > div:has(button) {{
-        background: {C['app_bg']} !important;
-        border-radius: 0 10px 10px 0 !important;
-        display: flex !important;
-        align-items: center !important;
-        padding-right: 6px !important;
+        background: transparent !important;
+        border-radius: 0 !important;
     }}
     button[data-testid="stChatInputSubmitButton"] {{
         background: transparent !important;
         border: none !important;
-        border-radius: 8px !important;
+        border-radius: 0 !important;
         box-shadow: none !important;
         color: {C['accent']} !important;
         display: flex !important;
@@ -324,35 +330,88 @@ st.markdown(f"""
     }}
     button[data-testid="stChatInputSubmitButton"] svg {{
         fill: currentColor !important;
-        stroke: currentColor !important;
-        width: 20px !important;
-        height: 20px !important;
+        width: 28px !important;
+        height: 28px !important;
     }}
-    .sidebar-card {{
-        background: {C['card_bg']};
-        border: 1px solid {C['border']};
-        border-radius: 12px; padding: 1rem;
-        box-shadow: {C['shadow']};
+    button[data-testid="stChatInputSubmitButton"] svg rect {{
+        fill: none !important;
+        stroke: none !important;
     }}
-    .sidebar-logo-row {{ display: flex; align-items: center; gap: 9px; margin-bottom: 0.5rem; }}
+    button[data-testid="stChatInputSubmitButton"] svg path {{
+        fill: currentColor !important;
+        stroke: none !important;
+    }}
+    .sidebar-bottom-info {{
+        position: fixed !important;
+        left: 1.5rem !important;
+        bottom: 1.5rem !important;
+        width: 200px !important;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+    }}
+    .sidebar-logo-row {{ display: flex; align-items: center; gap: 9px; margin-bottom: 0.65rem; }}
     .sidebar-logo-text {{
         font-size: 1rem; font-weight: 700;
         background: {C['title_grad']};
         -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }}
-    .sidebar-desc {{ font-size: 0.77rem; color: {C['text_muted']}; line-height: 1.6; margin-bottom: 0.5rem; }}
-    .sidebar-tags {{ display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 0.6rem; }}
+    .sidebar-desc {{ font-size: 0.76rem; color: {C['text_muted']}; line-height: 1.55; margin-bottom: 0.75rem; overflow-wrap: normal !important; word-break: normal !important; }}
+    .sidebar-tags {{ display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 0.75rem; }}
     .sidebar-tag {{
         background: rgba({C['accent_rgb']},0.08);
-        border: 1px solid rgba({C['accent_rgb']},0.2);
-        border-radius: 6px; padding: 2px 8px;
-        font-size: 0.67rem; color: {C['tag_text']}; font-weight: 500;
+        border: 1px solid rgba({C['accent_rgb']},0.24);
+        border-radius: 7px; padding: 3px 8px;
+        font-size: 0.66rem; color: {C['tag_text']}; font-weight: 600;
     }}
     .sidebar-dev {{
-        font-size: 0.68rem; color: {C['text_muted']}; opacity: 0.6;
-        padding-top: 0.5rem; border-top: 1px solid {C['divider']};
+        font-size: 0.66rem; color: {C['text_muted']}; opacity: 0.55;
+        padding-top: 0.65rem; border-top: 1px solid {C['divider']};
+        overflow-wrap: normal !important; word-break: normal !important;
     }}
-    .stButton button {{
+    [data-testid="stSidebar"] {{
+        min-width: 220px !important;
+    }}
+    [data-testid="stSidebar"] > div {{
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }}
+    .sidebar-actions-title {{
+        color: {C['text_muted']} !important; font-size: 0.68rem !important;
+        font-weight: 800 !important; text-transform: uppercase !important;
+        letter-spacing: 0.09em !important;
+        margin: 0.25rem 0 0.65rem 0 !important;
+        padding-left: 0 !important;
+    }}
+    [data-testid="stSidebar"] .stButton {{
+        margin-bottom: 0.7rem !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }}
+    [data-testid="stSidebar"] .stButton button {{
+        height: 40px !important;
+        width: 100% !important;
+        background: rgba({C['accent_rgb']},0.065) !important;
+        border: 1px solid rgba({C['accent_rgb']},0.28) !important;
+        color: {C['text']} !important;
+        border-radius: 10px !important; font-weight: 600 !important;
+        font-size: 0.85rem !important; justify-content: center !important;
+        padding: 0 1rem !important; box-shadow: none !important;
+        transition: all 0.18s ease !important; white-space: nowrap !important;
+    }}
+    [data-testid="stSidebar"] .stButton button:hover {{
+        background: rgba({C['accent_rgb']},0.14) !important;
+        border-color: rgba({C['accent_rgb']},0.5) !important;
+        color: {C['text']} !important;
+        box-shadow: 0 0 12px rgba({C['accent_rgb']},0.14) !important;
+        transform: translateY(-1px);
+    }}
+    [data-testid="stSidebar"] .stButton button:active {{
+        transform: translateY(0);
+        box-shadow: none !important;
+    }}
+    [data-testid="stMain"] .stButton button {{
         background: {C['btn_bg']} !important;
         border: 1px solid {C['btn_brd']} !important;
         color: {C['btn_txt']} !important;
@@ -360,7 +419,7 @@ st.markdown(f"""
         white-space: nowrap !important;
         transition: all 0.15s ease !important;
     }}
-    .stButton button:hover {{
+    [data-testid="stMain"] .stButton button:hover {{
         background: rgba({C['accent_rgb']},0.15) !important;
         border-color: {C['accent']} !important;
     }}
@@ -368,6 +427,42 @@ st.markdown(f"""
     ::-webkit-scrollbar {{ width: 5px; }}
     ::-webkit-scrollbar-thumb {{ background: rgba({C['accent_rgb']},0.25); border-radius: 3px; }}
 {_extra_css}
+    /* Fix definitivo: cantos arredondados uniformes no chat input */
+    [data-testid="stBottom"] [data-testid="stChatInput"] {{
+        border-radius: 16px !important;
+        overflow: hidden !important;
+        background: transparent !important;
+    }}
+    [data-testid="stBottom"] [data-testid="stChatInput"] > div {{
+        background: {C['input_bg']} !important;
+        border: 1.5px solid rgba({C['accent_rgb']},0.55) !important;
+        border-radius: 16px !important;
+        overflow: hidden !important;
+        box-shadow: none !important;
+        background-clip: padding-box !important;
+    }}
+    [data-testid="stBottom"] [data-testid="stChatInput"] > div div {{
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+    }}
+    [data-testid="stBottom"] [data-testid="stChatInputTextArea"],
+    [data-testid="stBottom"] textarea {{
+        background: transparent !important;
+        border: none !important;
+        outline: none !important;
+        box-shadow: none !important;
+    }}
+    [data-testid="stBottom"] button[data-testid="stChatInputSubmitButton"],
+    [data-testid="stBottom"] button[data-testid="stChatInputSubmitButton"]:hover,
+    [data-testid="stBottom"] button[data-testid="stChatInputSubmitButton"]:focus,
+    [data-testid="stBottom"] button[data-testid="stChatInputSubmitButton"]:active,
+    [data-testid="stBottom"] button[data-testid="stChatInputSubmitButton"]:focus-visible {{
+        background: transparent !important;
+        border: none !important;
+        outline: none !important;
+        box-shadow: none !important;
+    }}
 </style>
 """, unsafe_allow_html=True)
 
@@ -379,62 +474,56 @@ _inject_css = f"""\
 [data-testid="stBottom"] {{
   background-color: {C['app_bg']} !important;
 }}
-/* reset all divs inside stBottom, but NOT buttons/svg/img */
-[data-testid="stBottom"] div {{
-  background-color: {C['app_bg']} !important;
+/* textarea: transparent — visual field is the container */
+[data-testid="stBottom"] [data-testid="stChatInputTextArea"] {{
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 0.65rem 3.5rem 0.65rem 1rem !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  color: {C['text']} !important;
+  caret-color: {C['accent']} !important;
+  outline: none !important;
   box-shadow: none !important;
-}}
-[data-testid="stBottom"] [data-testid="stChatInput"] > div {{
-  background-color: {C['input_bg']} !important;
-  border: 1.5px solid rgba({C['accent_rgb']},0.55) !important;
-  border-radius: 14px !important;
-  box-shadow: none !important;
-}}
-[data-testid="stBottom"] [data-testid="stChatInput"] > div:focus-within {{
-  border-color: {C['accent']} !important;
-  box-shadow: 0 0 0 3px rgba({C['accent_rgb']},0.18),
-              0 0 24px rgba({C['accent_rgb']},0.22) !important;
-}}
-[data-testid="stBottom"] [data-testid="stChatInput"] > div > div {{
-  background-color: {C['input_bg']} !important;
-}}
-/* wrapper do botão: usa cor da página, cria efeito de "slot" visual */
-[data-testid="stBottom"] [data-testid="stChatInput"] > div > div:has(button) {{
-  background-color: {C['app_bg']} !important;
-  border-radius: 0 10px 10px 0 !important;
-  display: flex !important;
-  align-items: center !important;
-  padding-right: 6px !important;
-}}
-[data-testid="stChatInputTextArea"] {{
-  padding: 0.65rem 1rem !important;
 }}
 [data-testid="stBottom"] textarea {{
-  background-color: {C['input_bg']} !important;
   color: {C['text']} !important;
   caret-color: {C['accent']} !important;
 }}
-/* submit button: transparent bg, blue arrow only */
-button[data-testid="stChatInputSubmitButton"] {{
+/* submit button: transparent bg, blue arrow only — all states */
+button[data-testid="stChatInputSubmitButton"],
+button[data-testid="stChatInputSubmitButton"]:hover,
+button[data-testid="stChatInputSubmitButton"]:focus,
+button[data-testid="stChatInputSubmitButton"]:active,
+button[data-testid="stChatInputSubmitButton"]:focus-visible {{
   background: transparent !important;
-  border: none !important;
-  border-radius: 8px !important;
+  border: 0 !important;
+  outline: 0 !important;
   box-shadow: none !important;
+  border-radius: 0 !important;
   color: {C['accent']} !important;
-  transition: color 0.15s ease, filter 0.15s ease !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
 }}
-button[data-testid="stChatInputSubmitButton"]:hover {{
+button[data-testid="stChatInputSubmitButton"]:hover,
+button[data-testid="stChatInputSubmitButton"]:focus-visible {{
   color: #93c5fd !important;
   filter: drop-shadow(0 0 6px rgba({C['accent_rgb']},0.7)) !important;
 }}
 button[data-testid="stChatInputSubmitButton"] svg {{
   fill: currentColor !important;
-  stroke: currentColor !important;
-  width: 20px !important;
-  height: 20px !important;
+  width: 28px !important;
+  height: 28px !important;
+}}
+button[data-testid="stChatInputSubmitButton"] svg rect {{
+  fill: none !important;
+  stroke: none !important;
+}}
+button[data-testid="stChatInputSubmitButton"] svg path {{
+  fill: currentColor !important;
+  stroke: none !important;
 }}
 /* Main menu popover — cover every layer including the inner white div */
 [data-testid="stMainMenuPopover"],
@@ -490,6 +579,33 @@ button[data-testid="stChatInputSubmitButton"] svg {{
   opacity: 0.6 !important;
   font-size: 0.72rem !important;
 }}
+/* Hero popover (⋮ menu) */
+[data-testid="stPopover"],
+[data-testid="stPopover"] > div,
+[data-testid="stPopover"] > div > div {{
+  background-color: {C['card_bg']} !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.55) !important;
+}}
+[data-testid="stPopover"] {{
+  border: 1px solid rgba({C['accent_rgb']},0.2) !important;
+  overflow: hidden !important;
+}}
+[data-testid="stPopover"] button {{
+  background: transparent !important;
+  border: 1px solid rgba({C['accent_rgb']},0.15) !important;
+  color: {C['text']} !important;
+  border-radius: 8px !important;
+  width: 100% !important;
+}}
+[data-testid="stPopover"] button:hover {{
+  background: rgba({C['accent_rgb']},0.12) !important;
+  border-color: rgba({C['accent_rgb']},0.4) !important;
+}}
+[data-testid="stPopover"] button p {{
+  color: {C['text']} !important;
+  font-size: 0.85rem !important;
+}}
 """ if _dark else ""
 
 components.html(
@@ -510,6 +626,58 @@ components.html(
       p.document.head.appendChild(el);
     }}
     el.textContent = css;
+    var cont = p.document.querySelector('[data-testid="stChatInput"] > div');
+    var btn = p.document.querySelector('button[data-testid="stChatInputSubmitButton"]');
+    var bw = btn ? btn.parentElement : null;
+    var ta = p.document.querySelector('[data-testid="stChatInputTextArea"]');
+
+    var BLUE = 'rgba({C['accent_rgb']},0.55)';
+    var INPUT_BG = '{C['input_bg']}';
+    var ACCENT = '{C['accent']}';
+
+    // All inner divs of stChatInput: transparent
+    var chatInputEl = p.document.querySelector('[data-testid="stChatInput"]');
+    if (chatInputEl) {{
+      chatInputEl.querySelectorAll('div').forEach(function(d) {{
+        d.style.setProperty('background', 'transparent', 'important');
+        d.style.setProperty('box-shadow', 'none', 'important');
+      }});
+    }}
+    // Container: only the outer box gets the background
+    if (cont) {{
+      cont.style.setProperty('background', INPUT_BG, 'important');
+      cont.style.setProperty('border', '1.5px solid ' + BLUE, 'important');
+      cont.style.setProperty('border-radius', '16px', 'important');
+      cont.style.setProperty('box-shadow', 'none', 'important');
+      cont.style.setProperty('overflow', 'hidden', 'important');
+      cont.style.setProperty('background-clip', 'padding-box', 'important');
+    }}
+    // Textarea: transparent
+    if (ta) {{
+      ta.style.setProperty('background', 'transparent', 'important');
+      ta.style.setProperty('border', 'none', 'important');
+      ta.style.setProperty('outline', 'none', 'important');
+      ta.style.setProperty('box-shadow', 'none', 'important');
+      ta.style.setProperty('color', '{C['text']}', 'important');
+      ta.style.setProperty('caret-color', ACCENT, 'important');
+    }}
+    // Button wrapper: transparent — no border, no background
+    if (bw) {{
+      bw.style.setProperty('background', 'transparent', 'important');
+      bw.style.setProperty('border', 'none', 'important');
+      bw.style.setProperty('box-shadow', 'none', 'important');
+    }}
+    // Button: transparent, blue arrow
+    if (btn) {{
+      btn.style.setProperty('background', 'transparent', 'important');
+      btn.style.setProperty('border', 'none', 'important');
+      btn.style.setProperty('outline', 'none', 'important');
+      btn.style.setProperty('box-shadow', 'none', 'important');
+      btn.style.setProperty('color', ACCENT, 'important');
+      btn.style.setProperty('display', 'flex', 'important');
+      btn.style.setProperty('align-items', 'center', 'important');
+      btn.style.setProperty('justify-content', 'center', 'important');
+    }}
   }}
   inject();
   setTimeout(inject, 600);
@@ -520,23 +688,35 @@ components.html(
     height=0,
 )
 
-st.markdown(f"""
-<div class="hero">
-    <div class="hero-left">
+# ---------------------------------------------------------------------------
+# Header / Hero
+# ---------------------------------------------------------------------------
+hero_left_col, hero_status_col = st.columns([9, 1.5])
+
+with hero_left_col:
+    st.markdown(f"""
+    <div class="hero-left" style="padding:0.8rem 0 0.9rem 0;">
         <div class="hero-icon-wrap">
-            <img src="{ICON_URI}" width="44" height="44" alt="TrafegoAI icon"/>
+            <img src="{ICON_URI}" width="44" height="44" alt="TráfegoAI icon"/>
         </div>
         <div class="hero-text-col">
-            <div class="hero-title">TrafegoAI</div>
+            <div class="hero-title">TráfegoAI</div>
             <div class="hero-subtitle">Seu mentor de tr&aacute;fego pago</div>
         </div>
     </div>
-    <div class="status-badge">
-        <div class="status-dot"></div>
-        Online
+    """, unsafe_allow_html=True)
+
+with hero_status_col:
+    st.markdown(f"""
+    <div style="display:flex;align-items:center;height:100%;padding-top:0.9rem;justify-content:flex-end;">
+        <div class="status-badge">
+            <div class="status-dot"></div>
+            Online
+        </div>
     </div>
-</div>
-""", unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
+
+st.markdown(f'<div style="border-bottom:1px solid {C["border"]};margin-bottom:1.6rem;"></div>', unsafe_allow_html=True)
 
 
 # ---------------------------------------------------------------------------
@@ -651,38 +831,36 @@ if prompt := st.chat_input("Faça sua pergunta aqui..."):
 
 
 # ---------------------------------------------------------------------------
-# Sidebar - Informações
+# Sidebar - Ações e informações
 # ---------------------------------------------------------------------------
 with st.sidebar:
+    # Ações no topo
+    st.markdown('<p class="sidebar-actions-title">Ações rápidas</p>', unsafe_allow_html=True)
+
+    if st.button(f"{C['theme_icon']}  {C['theme_label']}", use_container_width=True):
+        st.session_state.theme = C['next_theme']
+        st.rerun()
+
+    if st.button("🗑️  Limpar conversa", use_container_width=True):
+        st.session_state.messages = []
+        st.rerun()
+
+    # Informações fixas no rodapé
     st.markdown(f"""
-    <div style="padding: 0.5rem 0 0.2rem 0;">
-        <div class="sidebar-card">
-            <div class="sidebar-logo-row">
-                <img src="{ICON_URI}" width="24" height="24"
-                     style="display:block; flex-shrink:0; min-width:24px; min-height:24px;"/>
-                <span class="sidebar-logo-text">TrafegoAI</span>
-            </div>
-            <div class="sidebar-desc">
-                Agente de IA especializado em tr&aacute;fego pago e estrat&eacute;gias de performance.
-            </div>
-            <div class="sidebar-tags">
-                <span class="sidebar-tag">Facebook Ads</span>
-                <span class="sidebar-tag">Google Ads</span>
-                <span class="sidebar-tag">Performance</span>
-            </div>
-            <div class="sidebar-dev">Desenvolvido por Major &middot; AI Developer</div>
+    <div class="sidebar-bottom-info">
+        <div class="sidebar-logo-row">
+            <img src="{ICON_URI}" width="24" height="24"
+                 style="display:block; flex-shrink:0; min-width:24px; min-height:24px;"/>
+            <span class="sidebar-logo-text">Tr&aacute;fegoAI</span>
         </div>
+        <div class="sidebar-desc">
+            Agente de IA especializado em tr&aacute;fego pago e estrat&eacute;gias de performance.
+        </div>
+        <div class="sidebar-tags">
+            <span class="sidebar-tag">Facebook Ads</span>
+            <span class="sidebar-tag">Google Ads</span>
+            <span class="sidebar-tag">Performance</span>
+        </div>
+        <div class="sidebar-dev">Desenvolvido por Major &middot; AI Developer</div>
     </div>
     """, unsafe_allow_html=True)
-
-    st.divider()
-
-    col1, col2 = st.columns([1, 1])
-    with col1:
-        if st.button(f"{C['theme_icon']} {C['theme_label']}", use_container_width=True):
-            st.session_state.theme = C['next_theme']
-            st.rerun()
-    with col2:
-        if st.button("🗑️ Limpar", use_container_width=True, help="Apagar todo o histórico da conversa"):
-            st.session_state.messages = []
-            st.rerun()
