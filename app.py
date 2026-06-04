@@ -11,6 +11,7 @@ import base64
 from pathlib import Path
 
 import streamlit as st
+import streamlit.components.v1 as components
 from dotenv import load_dotenv
 from langchain_core.messages import HumanMessage, AIMessage
 
@@ -348,6 +349,72 @@ st.markdown(f"""
 {_extra_css}
 </style>
 """, unsafe_allow_html=True)
+
+# ---------------------------------------------------------------------------
+# JS injector: appends <style> to parent document.head AFTER React renders
+# This is the only reliable way to override Emotion/Streamlit generated CSS
+# ---------------------------------------------------------------------------
+_inject_css = f"""\
+[data-testid="stBottom"],
+[data-testid="stBottom"] * {{
+  background-color: {C['app_bg']} !important;
+  box-shadow: none !important;
+}}
+[data-testid="stBottom"] [data-testid="stChatInputContainer"] {{
+  background-color: {C['input_bg']} !important;
+  border: 1.5px solid rgba({C['accent_rgb']},0.4) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.4) !important;
+}}
+[data-testid="stBottom"] [data-testid="stChatInputContainer"] * {{
+  background-color: {C['input_bg']} !important;
+}}
+[data-testid="stBottom"] textarea {{
+  background-color: {C['input_bg']} !important;
+  color: {C['text']} !important;
+  caret-color: {C['accent']} !important;
+}}
+[data-testid="stBottom"] [data-testid="stChatInputSubmitButton"] button {{
+  background-color: {C['accent']} !important;
+  border: none !important;
+  border-radius: 8px !important;
+  box-shadow: 0 0 10px rgba({C['accent_rgb']},0.55),0 0 20px rgba({C['accent_rgb']},0.28) !important;
+}}
+[data-testid="stBottom"] [data-testid="stChatInputSubmitButton"] button * {{
+  background-color: transparent !important;
+  color: #fff !important;
+  fill: #fff !important;
+  stroke: #fff !important;
+}}
+""" if _dark else ""
+
+components.html(
+    f"""<script>
+(function() {{
+  var css = `{_inject_css}`;
+  function inject() {{
+    var p = window.parent;
+    if (!p || !p.document) return;
+    if (!p.document.querySelector('[data-testid="stBottom"]')) {{
+      setTimeout(inject, 300);
+      return;
+    }}
+    var el = p.document.getElementById('tai-fix');
+    if (!el) {{
+      el = p.document.createElement('style');
+      el.id = 'tai-fix';
+      p.document.head.appendChild(el);
+    }}
+    el.textContent = css;
+  }}
+  inject();
+  setTimeout(inject, 600);
+  setTimeout(inject, 1800);
+  setTimeout(inject, 4000);
+}})();
+</script>""",
+    height=0,
+)
 
 st.markdown(f"""
 <div class="hero">
