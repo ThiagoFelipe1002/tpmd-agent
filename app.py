@@ -207,6 +207,72 @@ st.markdown(
             padding-top: 0.5rem;
             border-top: 1px solid rgba(255,255,255,0.05);
         }}
+
+        /* Force dark mode em toda a interface */
+        html, body {{
+            background-color: #0d1117 !important;
+            color: #e2e8f0 !important;
+        }}
+        .stApp, .stApp > div, [data-testid="stAppViewContainer"],
+        [data-testid="stMain"], [data-testid="stMainBlockContainer"] {{
+            background-color: #0d1117 !important;
+            background: linear-gradient(135deg, #0a0a0f 0%, #0d1117 50%, #080d14 100%) !important;
+            color: #e2e8f0 !important;
+        }}
+        /* Toolbar/header do Streamlit */
+        [data-testid="stHeader"] {{
+            background-color: #0a0a0f !important;
+            border-bottom: 1px solid rgba(99,179,237,0.07) !important;
+        }}
+        [data-testid="stToolbar"] {{
+            background: transparent !important;
+        }}
+        /* Bottom bar */
+        [data-testid="stBottom"], [data-testid="stBottom"] > div {{
+            background-color: #0d1117 !important;
+            border-top: 1px solid rgba(99,179,237,0.08) !important;
+        }}
+        /* Chat input */
+        [data-testid="stChatInput"], [data-testid="stChatInputTextArea"],
+        textarea, .stChatInput {{
+            background-color: #0f1520 !important;
+            color: #e2e8f0 !important;
+            border-color: rgba(99,179,237,0.2) !important;
+        }}
+        textarea::placeholder {{
+            color: rgba(255,255,255,0.3) !important;
+        }}
+        /* Mensagens do chat */
+        [data-testid="stChatMessage"] {{
+            background-color: rgba(255,255,255,0.02) !important;
+            border: 1px solid rgba(255,255,255,0.05) !important;
+            color: #e2e8f0 !important;
+        }}
+        [data-testid="stChatMessage"] p,
+        [data-testid="stChatMessage"] span,
+        [data-testid="stChatMessage"] div {{
+            color: #e2e8f0 !important;
+        }}
+        /* Botões */
+        .stButton > button {{
+            background: rgba(37,99,235,0.12) !important;
+            border: 1px solid rgba(99,179,237,0.25) !important;
+            color: #90CDF4 !important;
+            border-radius: 8px !important;
+        }}
+        .stButton > button:hover {{
+            background: rgba(37,99,235,0.22) !important;
+            border-color: rgba(99,179,237,0.45) !important;
+        }}
+        /* Divider */
+        hr {{
+            border-color: rgba(99,179,237,0.1) !important;
+        }}
+        /* Scrollbar */
+        ::-webkit-scrollbar {{ width: 6px; height: 6px; }}
+        ::-webkit-scrollbar-track {{ background: #0d1117; }}
+        ::-webkit-scrollbar-thumb {{ background: rgba(99,179,237,0.2); border-radius: 3px; }}
+        ::-webkit-scrollbar-thumb:hover {{ background: rgba(99,179,237,0.35); }}
     </style>
 
     <div class="hero">
