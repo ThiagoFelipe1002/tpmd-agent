@@ -417,6 +417,24 @@ st.markdown(f"""
     hr {{ border-color: {C['divider']} !important; }}
     ::-webkit-scrollbar {{ width: 5px; }}
     ::-webkit-scrollbar-thumb {{ background: rgba({C['accent_rgb']},0.25); border-radius: 3px; }}
+    .custom-loading {{
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        background: rgba({C['accent_rgb']}, 0.07);
+        border: 1px solid rgba({C['accent_rgb']}, 0.22);
+        color: {C['text_muted']};
+        border-radius: 10px;
+        padding: 0.55rem 0.85rem;
+        font-size: 0.86rem;
+        font-weight: 500;
+    }}
+    .custom-loading-dot {{
+        width: 9px; height: 9px; border-radius: 50%;
+        background: {C['accent']};
+        box-shadow: 0 0 10px rgba({C['accent_rgb']}, 0.8);
+        animation: pulse 1.2s infinite ease-in-out;
+    }}
 {_extra_css}
     /* Fix definitivo: cantos arredondados uniformes no chat input */
     [data-testid="stBottom"] [data-testid="stChatInput"] {{
@@ -704,7 +722,7 @@ st.markdown(f'<div style="border-bottom:1px solid {C["border"]};margin-bottom:1.
 # ---------------------------------------------------------------------------
 # Carregamento do índice e agente (cached)
 # ---------------------------------------------------------------------------
-@st.cache_resource(show_spinner="Carregando base de conhecimento...")
+@st.cache_resource(show_spinner=False)
 def load_agent():
     provider = _secret("AI_PROVIDER", "openai").lower()
 
@@ -749,7 +767,10 @@ def load_agent():
         return None, f"Erro ao carregar o agente: {e}"
 
 
+_loading = st.empty()
+_loading.markdown('<div class="custom-loading"><div class="custom-loading-dot"></div>Carregando base de conhecimento...</div>', unsafe_allow_html=True)
 agent, error_msg = load_agent()
+_loading.empty()
 
 if error_msg:
     st.error(error_msg)
