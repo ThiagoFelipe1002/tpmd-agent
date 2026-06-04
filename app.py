@@ -285,15 +285,15 @@ st.markdown(f"""
     /* Base chat input container */
     .stChatInputContainer {{
         background: {C['input_bg']} !important;
-        border: 1.5px solid {C['border']} !important;
+        border: 1.5px solid rgba({C['accent_rgb']},0.45) !important;
         border-radius: 14px !important;
         box-shadow: none !important;
         overflow: hidden !important;
     }}
     .stChatInputContainer:focus-within {{
         border-color: {C['accent']} !important;
-        box-shadow: 0 0 0 3px rgba({C['accent_rgb']},0.12),
-                    0 0 20px rgba({C['accent_rgb']},0.15) !important;
+        box-shadow: 0 0 0 3px rgba({C['accent_rgb']},0.15),
+                    0 0 22px rgba({C['accent_rgb']},0.2) !important;
     }}
     [data-testid="stChatInputSubmitButton"] button {{
         background: linear-gradient(135deg, {C['accent']}, #60a5fa) !important;
@@ -374,9 +374,14 @@ _inject_css = f"""\
 }}
 [data-testid="stBottom"] [data-testid="stChatInputContainer"] {{
   background-color: {C['input_bg']} !important;
-  border: 1.5px solid rgba({C['accent_rgb']},0.4) !important;
+  border: 1.5px solid rgba({C['accent_rgb']},0.5) !important;
   border-radius: 14px !important;
-  box-shadow: 0 2px 20px rgba(0,0,0,0.4) !important;
+  box-shadow: none !important;
+}}
+[data-testid="stBottom"] [data-testid="stChatInputContainer"]:focus-within {{
+  border-color: {C['accent']} !important;
+  box-shadow: 0 0 0 3px rgba({C['accent_rgb']},0.18),
+              0 0 24px rgba({C['accent_rgb']},0.22) !important;
 }}
 [data-testid="stBottom"] [data-testid="stChatInputContainer"] * {{
   background-color: {C['input_bg']} !important;
@@ -406,6 +411,30 @@ _inject_css = f"""\
   color: #fff !important;
   fill: #fff !important;
   stroke: #fff !important;
+}}
+/* Main menu popover */
+[data-testid="stMainMenuPopover"],
+[data-testid="stMainMenuPopover"] ul,
+[data-baseweb="popover"] [role="listbox"],
+[data-baseweb="menu"] {{
+  background-color: {C['card_bg']} !important;
+  border: 1px solid {C['border']} !important;
+  border-radius: 10px !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
+}}
+[data-testid="stMainMenuPopover"] li,
+[data-testid="stMainMenuPopover"] button,
+[data-testid="stMainMenuPopover"] span,
+[data-testid="stMainMenuPopover"] a,
+[data-baseweb="menu"] li,
+[data-baseweb="menu"] [role="option"] {{
+  color: {C['text']} !important;
+  background-color: transparent !important;
+}}
+[data-testid="stMainMenuPopover"] li:hover,
+[data-baseweb="menu"] [role="option"]:hover {{
+  background-color: rgba({C['accent_rgb']},0.1) !important;
+  color: {C['accent']} !important;
 }}
 """ if _dark else ""
 
