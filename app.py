@@ -185,7 +185,7 @@ st.markdown(f"""
     [data-testid="stMain"], [data-testid="stMainBlockContainer"] {{
         background: {C['app_bg']} !important;
     }}
-    .block-container {{ padding-top: 1.5rem !important; max-width: 900px !important; }}
+    .block-container {{ padding: 1.5rem 2rem 1rem 2rem !important; max-width: 100% !important; }}
     [data-testid="stHeader"] {{
         background: {C['app_bg']} !important;
         border-bottom: 1px solid {C['border']} !important;
@@ -200,24 +200,24 @@ st.markdown(f"""
     }}
     .hero {{
         display: flex; align-items: center; justify-content: space-between;
-        padding: 1.1rem 0 1rem 0;
+        padding: 0.8rem 0 0.9rem 0;
         border-bottom: 1px solid {C['border']};
-        margin-bottom: 1.8rem;
+        margin-bottom: 1.6rem;
     }}
     .hero-left {{ display: flex; flex-direction: row; align-items: center; gap: 14px; }}
-    .hero-text-col {{ display: flex; flex-direction: column; gap: 3px; }}
-    .hero-icon-wrap {{ flex-shrink: 0; width: 48px; height: 48px; line-height: 0; }}
+    .hero-text-col {{ display: flex; flex-direction: column; gap: 2px; }}
+    .hero-icon-wrap {{ flex-shrink: 0; width: 44px; height: 44px; line-height: 0; }}
     .hero-icon-wrap img {{
-        width: 48px !important; height: 48px !important;
-        min-width: 48px !important; min-height: 48px !important;
-        display: block !important; border-radius: 12px !important;
+        width: 44px !important; height: 44px !important;
+        min-width: 44px !important; min-height: 44px !important;
+        display: block !important; border-radius: 10px !important;
     }}
     .hero-title {{
-        font-size: 1.85rem; font-weight: 800; letter-spacing: -0.8px; line-height: 1.1;
+        font-size: 1.6rem; font-weight: 800; letter-spacing: -0.6px; line-height: 1.1;
         background: {C['title_grad']};
         -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }}
-    .hero-subtitle {{ font-size: 0.82rem; color: {C['text_muted']}; }}
+    .hero-subtitle {{ font-size: 0.78rem; color: {C['text_muted']}; }}
     .status-badge {{
         display: inline-flex; align-items: center; gap: 7px;
         background: {C['status_bg']}; border: 1px solid {C['status_brd']};
@@ -483,6 +483,6 @@ with st.sidebar:
             st.session_state.theme = C['next_theme']
             st.rerun()
     with col2:
-        if st.button("🗑️ Limpar conversa", use_container_width=True):
+        if st.button("🗑️ Limpar", use_container_width=True, help="Apagar todo o histórico da conversa"):
             st.session_state.messages = []
             st.rerun()
