@@ -19,22 +19,22 @@ from langchain_core.messages import HumanMessage, AIMessage
 # ---------------------------------------------------------------------------
 _SVG_ICON = """<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="bg" x1="0" y1="48" x2="48" y2="0" gradientUnits="userSpaceOnUse">
+    <linearGradient id="tai-bg" x1="0" y1="48" x2="48" y2="0" gradientUnits="userSpaceOnUse">
       <stop offset="0%" stop-color="#1e3a8a" stop-opacity="0.5"/>
       <stop offset="100%" stop-color="#1d4ed8" stop-opacity="0.2"/>
     </linearGradient>
-    <linearGradient id="bd" x1="0" y1="48" x2="48" y2="0" gradientUnits="userSpaceOnUse">
+    <linearGradient id="tai-bd" x1="0" y1="48" x2="48" y2="0" gradientUnits="userSpaceOnUse">
       <stop offset="0%" stop-color="#3b82f6"/>
       <stop offset="100%" stop-color="#93c5fd"/>
     </linearGradient>
-    <linearGradient id="ar" x1="8" y1="36" x2="40" y2="12" gradientUnits="userSpaceOnUse">
+    <linearGradient id="tai-ar" x1="8" y1="36" x2="40" y2="12" gradientUnits="userSpaceOnUse">
       <stop offset="0%" stop-color="#3b82f6"/>
       <stop offset="100%" stop-color="#bae6fd"/>
     </linearGradient>
   </defs>
-  <rect x="2" y="2" width="44" height="44" rx="12" fill="url(#bg)" stroke="url(#bd)" stroke-width="1.5"/>
-  <polyline points="9,35 18,24 25,29 36,16" stroke="url(#ar)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-  <polyline points="30,13 37,16 34,23" stroke="url(#ar)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <rect x="2" y="2" width="44" height="44" rx="12" fill="url(#tai-bg)" stroke="url(#tai-bd)" stroke-width="1.5"/>
+  <polyline points="9,35 18,24 25,29 36,16" stroke="url(#tai-ar)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <polyline points="30,13 37,16 34,23" stroke="url(#tai-ar)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
 </svg>"""
 ICON_URI = "data:image/svg+xml;base64," + base64.b64encode(_SVG_ICON.encode()).decode()
 
@@ -140,49 +140,47 @@ _extra_css = f"""
     p, li, label, .stMarkdown, h1, h2, h3, h4, span {{
         color: {C['text']} !important;
     }}
-    /* -- Dark: stBottom wrapper only -- */
+    /* -- Dark: stBottom — wipe wrappers, then re-style with higher specificity -- */
     [data-testid="stBottom"] {{
         background-color: {C['app_bg']} !important;
         border-top: 1px solid rgba({C['accent_rgb']},0.12) !important;
     }}
-    [data-testid="stBottom"] > div,
-    [data-testid="stBottom"] > div > div,
-    [data-testid="stBottom"] > div > div > div,
-    [data-testid="stBottom"] > div > div > div > div {{
+    /* descendant * keeps app_bg on ALL wrappers */
+    [data-testid="stBottom"] div {{
         background-color: {C['app_bg']} !important;
         box-shadow: none !important;
-        border: none !important;
     }}
-    /* -- Dark: input container -- */
-    [data-testid="stChatInputContainer"] {{
+    /* specificity (0,2,0) beats (0,1,0) of [stBottom] div */
+    [data-testid="stBottom"] [data-testid="stChatInputContainer"] {{
         background-color: {C['input_bg']} !important;
-        border: 1.5px solid rgba({C['accent_rgb']},0.35) !important;
+        border: 1.5px solid rgba({C['accent_rgb']},0.4) !important;
         border-radius: 14px !important;
-        box-shadow: 0 0 0 1px rgba({C['accent_rgb']},0.08) !important;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.4) !important;
     }}
-    [data-testid="stChatInputContainer"]:focus-within {{
+    [data-testid="stBottom"] [data-testid="stChatInputContainer"]:focus-within {{
         border-color: {C['accent']} !important;
-        box-shadow: 0 0 0 3px rgba({C['accent_rgb']},0.15),
-                    0 0 24px rgba({C['accent_rgb']},0.18) !important;
+        box-shadow: 0 0 0 3px rgba({C['accent_rgb']},0.18),
+                    0 0 24px rgba({C['accent_rgb']},0.22) !important;
     }}
-    [data-testid="stChatInputContainer"] > div {{
+    /* specificity (0,2,0) for inner div */
+    [data-testid="stBottom"] [data-testid="stChatInputContainer"] > div {{
         background-color: {C['input_bg']} !important;
     }}
-    /* -- Dark: textarea -- */
-    textarea {{
+    /* specificity (0,1,1) for textarea inside bottom */
+    [data-testid="stBottom"] textarea {{
         background-color: {C['input_bg']} !important;
         color: {C['text']} !important;
         caret-color: {C['accent']} !important;
     }}
-    /* -- Dark: submit button -- */
-    [data-testid="stChatInputSubmitButton"] button {{
+    /* specificity (0,2,1) for submit button */
+    [data-testid="stBottom"] [data-testid="stChatInputSubmitButton"] button {{
         background-color: {C['accent']} !important;
         border: none !important;
         border-radius: 8px !important;
-        box-shadow: 0 0 10px rgba({C['accent_rgb']},0.5),
-                    0 0 20px rgba({C['accent_rgb']},0.25) !important;
+        box-shadow: 0 0 10px rgba({C['accent_rgb']},0.55),
+                    0 0 20px rgba({C['accent_rgb']},0.28) !important;
     }}
-    [data-testid="stChatInputSubmitButton"] button * {{
+    [data-testid="stBottom"] [data-testid="stChatInputSubmitButton"] button * {{
         color: #fff !important;
         fill: #fff !important;
         stroke: #fff !important;
