@@ -389,6 +389,10 @@ _inject_css = f"""\
 [data-testid="stBottom"] [data-testid="stChatInput"] > div > div {{
   background-color: {C['input_bg']} !important;
 }}
+/* wrapper que contém o botão deve ser transparente */
+[data-testid="stBottom"] [data-testid="stChatInput"] > div > div:has(button) {{
+  background-color: transparent !important;
+}}
 [data-testid="stChatInputTextArea"] {{
   padding: 0.65rem 1rem !important;
 }}
@@ -660,7 +664,7 @@ with st.sidebar:
 
     st.divider()
 
-    col1, col2 = st.columns([3, 2])
+    col1, col2 = st.columns([1, 1])
     with col1:
         if st.button(f"{C['theme_icon']} {C['theme_label']}", use_container_width=True):
             st.session_state.theme = C['next_theme']
