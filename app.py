@@ -365,18 +365,6 @@ with st.sidebar:
         """,
         unsafe_allow_html=True,
     )
-                </div>
-                <div class="sidebar-tags">
-                    <span class="sidebar-tag">Facebook Ads</span>
-                    <span class="sidebar-tag">Google Ads</span>
-                    <span class="sidebar-tag">Performance</span>
-                </div>
-                <div class="sidebar-dev">Desenvolvido por Major · AI Developer</div>
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
     st.divider()
 
     if st.button("Limpar conversa"):
