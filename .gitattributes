@@ -1,0 +1,3 @@
+# Arquivos binários - não converter line endings
+*.faiss binary
+*.pkl binary
