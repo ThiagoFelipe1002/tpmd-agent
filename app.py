@@ -164,7 +164,7 @@ with st.sidebar:
         Este agente usa RAG (Retrieval-Augmented Generation) 
         para responder perguntas sobre tráfego pago e marketing digital.
         
-        **Desenvolvido por:**
+        **Desenvolvido por:**  
         Major - AI Developer
         """
     )
