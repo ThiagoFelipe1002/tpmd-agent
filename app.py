@@ -127,47 +127,47 @@ else:
 # CSS extra condicional: dark mode precisa sobrescrever toolbar do Streamlit
 # que renderiza com base="light" (icons/texto dark por padrão)
 _extra_css = f"""
-    /* Dark mode: recolor Streamlit toolbar so icons/text are visible */
+    /* Dark: recolor toolbar icons */
     [data-testid="stHeader"] [data-testid="stToolbar"] button,
     [data-testid="stHeader"] [data-testid="stToolbar"] a,
     [data-testid="stStatusWidget"] span,
     [data-testid="stDecoration"] {{ filter: brightness(0) invert(0.65) !important; }}
     [data-testid="stHeader"] [data-testid="stToolbar"] button:hover {{
-        filter: brightness(0) invert(1) !important; background: rgba(255,255,255,0.08) !important;
+        filter: brightness(0) invert(1) !important;
+        background: rgba(255,255,255,0.08) !important;
     }}
-    /* Dark mode: text in the main content area */
-    p, li, span, label, .stMarkdown, h1, h2, h3, h4 {{
+    /* Dark: main text */
+    p, li, label, .stMarkdown, h1, h2, h3, h4 {{
         color: {C['text']} !important;
     }}
-    /* Dark mode: nuke all white backgrounds in the bottom bar */
-    [data-testid="stBottom"],
-    [data-testid="stBottom"] > div,
-    [data-testid="stBottom"] > div > div,
-    [data-testid="stBottom"] > div > div > div,
-    [data-testid="stBottom"] > div > div > div > div {{
-        background: {C['app_bg']} !important;
+    /* Nuclear: wipe ALL backgrounds inside stBottom */
+    [data-testid="stBottom"] * {{
+        background-color: transparent !important;
         box-shadow: none !important;
-        border: none !important;
     }}
-    /* Dark mode: the actual chat input frame */
+    [data-testid="stBottom"] {{
+        background-color: {C['app_bg']} !important;
+    }}
     [data-testid="stChatInputContainer"],
-    div[class*="stChatInput"] {{
-        background: {C['input_bg']} !important;
-        border: 1px solid {C['border']} !important;
+    [data-testid="stChatInputContainer"] > div {{
+        background-color: {C['input_bg']} !important;
+        border: 1.5px solid {C['border']} !important;
         border-radius: 14px !important;
-        box-shadow: 0 0 0 1px {C['border']} !important;
-        outline: none !important;
     }}
-    [data-testid="stChatInputContainer"]:focus-within,
-    div[class*="stChatInput"]:focus-within {{
+    [data-testid="stChatInputContainer"]:focus-within {{
         border-color: {C['accent']} !important;
-        box-shadow: 0 0 0 2px rgba({C['accent_rgb']},0.25) !important;
+        box-shadow: 0 0 0 3px rgba({C['accent_rgb']},0.15) !important;
     }}
-    /* Dark mode: submit button */
+    textarea, [data-testid="stChatInputTextArea"] {{
+        background-color: {C['input_bg']} !important;
+        color: {C['text']} !important;
+        caret-color: {C['accent']} !important;
+    }}
     [data-testid="stChatInputSubmitButton"] button {{
-        background: {C['accent']} !important;
+        background-color: {C['accent']} !important;
         color: #fff !important;
         border: none !important;
+        border-radius: 8px !important;
     }}
 """ if _dark else """"""
 
