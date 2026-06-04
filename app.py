@@ -151,21 +151,21 @@ _extra_css = f"""
         background-color: {C['app_bg']} !important;
         box-shadow: none !important;
     }}
-    /* specificity (0,2,0) beats (0,1,0) of [stBottom] div */
-    [data-testid="stBottom"] [data-testid="stChatInputContainer"] {{
+    /* chat input visual box */
+    [data-testid="stBottom"] [data-testid="stChatInput"] > div {{
         background-color: {C['input_bg']} !important;
-        border: 1.5px solid rgba({C['accent_rgb']},0.4) !important;
+        border: 1.5px solid rgba({C['accent_rgb']},0.5) !important;
         border-radius: 14px !important;
-        box-shadow: 0 2px 20px rgba(0,0,0,0.4) !important;
+        box-shadow: none !important;
     }}
-    [data-testid="stBottom"] [data-testid="stChatInputContainer"]:focus-within {{
+    [data-testid="stBottom"] [data-testid="stChatInput"] > div:focus-within {{
         border-color: {C['accent']} !important;
         box-shadow: 0 0 0 3px rgba({C['accent_rgb']},0.18),
                     0 0 24px rgba({C['accent_rgb']},0.22) !important;
     }}
-    /* specificity (0,2,0) for inner div */
-    [data-testid="stBottom"] [data-testid="stChatInputContainer"] > div {{
-        background-color: {C['input_bg']} !important;
+    /* textarea padding */
+    [data-testid="stChatInputTextArea"] {{
+        padding: 0.65rem 1rem !important;
     }}
     /* specificity (0,1,1) for textarea inside bottom */
     [data-testid="stBottom"] textarea {{
@@ -282,15 +282,18 @@ st.markdown(f"""
         box-shadow: none !important;
     }}
     textarea::placeholder {{ color: {C['text_muted']} !important; }}
-    /* Base chat input container */
-    .stChatInputContainer {{
+    /* textarea padding */
+    [data-testid="stChatInputTextArea"] {{
+        padding: 0.65rem 1rem !important;
+    }}
+    /* Chat input visual box */
+    [data-testid="stChatInput"] > div {{
         background: {C['input_bg']} !important;
-        border: 1.5px solid rgba({C['accent_rgb']},0.45) !important;
+        border: 1.5px solid rgba({C['accent_rgb']},0.5) !important;
         border-radius: 14px !important;
         box-shadow: none !important;
-        overflow: hidden !important;
     }}
-    .stChatInputContainer:focus-within {{
+    [data-testid="stChatInput"] > div:focus-within {{
         border-color: {C['accent']} !important;
         box-shadow: 0 0 0 3px rgba({C['accent_rgb']},0.15),
                     0 0 22px rgba({C['accent_rgb']},0.2) !important;
@@ -372,19 +375,22 @@ _inject_css = f"""\
   background-color: {C['app_bg']} !important;
   box-shadow: none !important;
 }}
-[data-testid="stBottom"] [data-testid="stChatInputContainer"] {{
+[data-testid="stBottom"] [data-testid="stChatInput"] > div {{
   background-color: {C['input_bg']} !important;
-  border: 1.5px solid rgba({C['accent_rgb']},0.5) !important;
+  border: 1.5px solid rgba({C['accent_rgb']},0.55) !important;
   border-radius: 14px !important;
   box-shadow: none !important;
 }}
-[data-testid="stBottom"] [data-testid="stChatInputContainer"]:focus-within {{
+[data-testid="stBottom"] [data-testid="stChatInput"] > div:focus-within {{
   border-color: {C['accent']} !important;
   box-shadow: 0 0 0 3px rgba({C['accent_rgb']},0.18),
               0 0 24px rgba({C['accent_rgb']},0.22) !important;
 }}
-[data-testid="stBottom"] [data-testid="stChatInputContainer"] * {{
+[data-testid="stBottom"] [data-testid="stChatInput"] > div > * {{
   background-color: {C['input_bg']} !important;
+}}
+[data-testid="stChatInputTextArea"] {{
+  padding: 0.65rem 1rem !important;
 }}
 [data-testid="stBottom"] textarea {{
   background-color: {C['input_bg']} !important;
