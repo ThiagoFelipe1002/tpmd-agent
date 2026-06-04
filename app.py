@@ -63,155 +63,206 @@ st.set_page_config(
     layout="wide",
 )
 
-st.markdown(
-    f"""
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+# ---------------------------------------------------------------------------
+# Estado do tema
+# ---------------------------------------------------------------------------
+if "theme" not in st.session_state:
+    st.session_state.theme = "dark"
 
-        html, body, [class*="css"] {{
-            font-family: 'Inter', sans-serif;
-        }}
+_dark = st.session_state.theme == "dark"
 
-        .block-container {{
-            padding-top: 2rem !important;
-        }}
+if _dark:
+    C = dict(
+        app_bg       = "#060b18",
+        sidebar_bg   = "#08101e",
+        card_bg      = "#0d1527",
+        border       = "rgba(59,130,246,0.15)",
+        text         = "#e2e8f0",
+        text_muted   = "#8ba4c0",
+        title_grad   = "linear-gradient(90deg,#60a5fa 0%,#bae6fd 100%)",
+        accent       = "#3b82f6",
+        accent_rgb   = "59,130,246",
+        tag_text     = "#93c5fd",
+        divider      = "rgba(59,130,246,0.08)",
+        input_bg     = "#0d1527",
+        status_bg    = "rgba(34,197,94,0.08)",
+        status_brd   = "rgba(34,197,94,0.2)",
+        status_txt   = "#4ade80",
+        status_dot   = "#22c55e",
+        btn_bg       = "rgba(59,130,246,0.1)",
+        btn_brd      = "rgba(59,130,246,0.3)",
+        btn_txt      = "#60a5fa",
+        shadow       = "0 4px 24px rgba(0,0,0,0.5)",
+        theme_icon   = "\u2600\ufe0f",
+        theme_label  = "Modo Claro",
+        next_theme   = "light",
+    )
+else:
+    C = dict(
+        app_bg       = "#f0f4f8",
+        sidebar_bg   = "#e2e8f0",
+        card_bg      = "#ffffff",
+        border       = "rgba(30,64,175,0.12)",
+        text         = "#0f172a",
+        text_muted   = "#475569",
+        title_grad   = "linear-gradient(90deg,#1e40af 0%,#2563eb 100%)",
+        accent       = "#2563eb",
+        accent_rgb   = "37,99,235",
+        tag_text     = "#1e40af",
+        divider      = "rgba(30,64,175,0.08)",
+        input_bg     = "#ffffff",
+        status_bg    = "rgba(22,163,74,0.08)",
+        status_brd   = "rgba(22,163,74,0.25)",
+        status_txt   = "#166534",
+        status_dot   = "#16a34a",
+        btn_bg       = "rgba(37,99,235,0.06)",
+        btn_brd      = "rgba(37,99,235,0.2)",
+        btn_txt      = "#1d4ed8",
+        shadow       = "0 2px 12px rgba(0,0,0,0.07)",
+        theme_icon   = "\U0001f319",
+        theme_label  = "Modo Escuro",
+        next_theme   = "dark",
+    )
 
-        /* Cabeçalho */
-        .hero {{
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1.4rem 0 1.2rem 0;
-            border-bottom: 1px solid rgba(128,128,128,0.15);
-            margin-bottom: 2rem;
-        }}
-        .hero-left {{
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-        }}
-        .hero-title-row {{
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }}
-        .hero-icon-wrap {{
-            flex-shrink: 0;
-        }}
-        .hero-title {{
-            font-size: 1.9rem;
-            font-weight: 800;
-            letter-spacing: -0.8px;
-            color: var(--primary-color);
-            line-height: 1.1;
-        }}
-        .hero-subtitle {{
-            font-size: 0.85rem;
-            color: var(--text-color);
-            opacity: 0.5;
-            letter-spacing: 0.3px;
-        }}
-        .status-badge {{
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(34,197,94,0.1);
-            border: 1px solid rgba(34,197,94,0.3);
-            border-radius: 20px;
-            padding: 4px 12px;
-            font-size: 0.72rem;
-            color: #15803d;
-            font-weight: 500;
-        }}
-        .status-dot {{
-            width: 6px;
-            height: 6px;
-            background: #16a34a;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }}
-        @keyframes pulse {{
-            0%, 100% {{ opacity: 1; }}
-            50% {{ opacity: 0.4; }}
-        }}
+st.markdown(f"""
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    html, body, [class*="css"] {{ font-family: 'Inter', sans-serif !important; }}
+    .stApp, [data-testid="stAppViewContainer"],
+    [data-testid="stMain"], [data-testid="stMainBlockContainer"] {{
+        background: {C['app_bg']} !important;
+    }}
+    .block-container {{ padding-top: 1.5rem !important; max-width: 900px !important; }}
+    [data-testid="stHeader"] {{
+        background: {C['app_bg']} !important;
+        border-bottom: 1px solid {C['border']} !important;
+    }}
+    [data-testid="stBottom"], [data-testid="stBottom"] > div {{
+        background: {C['app_bg']} !important;
+        border-top: 1px solid {C['border']} !important;
+    }}
+    [data-testid="stSidebar"], [data-testid="stSidebar"] > div {{
+        background: {C['sidebar_bg']} !important;
+        border-right: 1px solid {C['border']} !important;
+    }}
+    .hero {{
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 1.1rem 0 1rem 0;
+        border-bottom: 1px solid {C['border']};
+        margin-bottom: 1.8rem;
+    }}
+    .hero-left {{ display: flex; flex-direction: column; gap: 4px; }}
+    .hero-title-row {{ display: flex; align-items: center; gap: 14px; }}
+    .hero-icon-wrap {{ flex-shrink: 0; width: 48px; height: 48px; line-height: 0; overflow: visible; }}
+    .hero-icon-wrap img {{
+        width: 48px !important; height: 48px !important;
+        min-width: 48px !important; min-height: 48px !important;
+        display: block !important;
+    }}
+    .hero-title {{
+        font-size: 1.85rem; font-weight: 800; letter-spacing: -0.8px; line-height: 1.1;
+        background: {C['title_grad']};
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }}
+    .hero-subtitle {{ font-size: 0.82rem; color: {C['text_muted']}; padding-left: 62px; }}
+    .status-badge {{
+        display: inline-flex; align-items: center; gap: 7px;
+        background: {C['status_bg']}; border: 1px solid {C['status_brd']};
+        border-radius: 20px; padding: 5px 14px;
+        font-size: 0.72rem; color: {C['status_txt']}; font-weight: 600;
+    }}
+    .status-dot {{
+        width: 7px; height: 7px; background: {C['status_dot']};
+        border-radius: 50%; box-shadow: 0 0 8px {C['status_dot']};
+        animation: pulse 2s infinite;
+    }}
+    @keyframes pulse {{
+        0%, 100% {{ opacity: 1; }}
+        50% {{ opacity: 0.4; }}
+    }}
+    [data-testid="stChatMessage"] {{
+        background: {C['card_bg']} !important;
+        border: 1px solid {C['border']} !important;
+        border-radius: 12px !important;
+        box-shadow: {C['shadow']} !important;
+    }}
+    [data-testid="stChatMessage"] p,
+    [data-testid="stChatMessage"] li,
+    [data-testid="stChatMessage"] span {{
+        color: {C['text']} !important;
+    }}
+    [data-testid="stChatInput"], textarea {{
+        background: {C['input_bg']} !important;
+        color: {C['text']} !important;
+    }}
+    textarea::placeholder {{ color: {C['text_muted']} !important; }}
+    .stChatInputContainer {{
+        background: {C['input_bg']} !important;
+        border: 1px solid {C['border']} !important;
+        border-radius: 14px !important;
+        box-shadow: {C['shadow']} !important;
+    }}
+    .stChatInputContainer:focus-within {{
+        border-color: {C['accent']} !important;
+        box-shadow: 0 0 0 3px rgba({C['accent_rgb']},0.12) !important;
+    }}
+    .sidebar-card {{
+        background: {C['card_bg']};
+        border: 1px solid {C['border']};
+        border-radius: 12px; padding: 1rem;
+        box-shadow: {C['shadow']};
+    }}
+    .sidebar-logo-row {{ display: flex; align-items: center; gap: 9px; margin-bottom: 0.5rem; }}
+    .sidebar-logo-text {{
+        font-size: 1rem; font-weight: 700;
+        background: {C['title_grad']};
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }}
+    .sidebar-desc {{ font-size: 0.77rem; color: {C['text_muted']}; line-height: 1.6; margin-bottom: 0.5rem; }}
+    .sidebar-tags {{ display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 0.6rem; }}
+    .sidebar-tag {{
+        background: rgba({C['accent_rgb']},0.08);
+        border: 1px solid rgba({C['accent_rgb']},0.2);
+        border-radius: 6px; padding: 2px 8px;
+        font-size: 0.67rem; color: {C['tag_text']}; font-weight: 500;
+    }}
+    .sidebar-dev {{
+        font-size: 0.68rem; color: {C['text_muted']}; opacity: 0.6;
+        padding-top: 0.5rem; border-top: 1px solid {C['divider']};
+    }}
+    .stButton > button {{
+        background: {C['btn_bg']} !important;
+        border: 1px solid {C['btn_brd']} !important;
+        color: {C['btn_txt']} !important;
+        border-radius: 8px !important; font-weight: 500 !important;
+    }}
+    .stButton > button:hover {{
+        background: rgba({C['accent_rgb']},0.15) !important;
+        border-color: {C['accent']} !important;
+    }}
+    hr {{ border-color: {C['divider']} !important; }}
+    ::-webkit-scrollbar {{ width: 5px; }}
+    ::-webkit-scrollbar-thumb {{ background: rgba({C['accent_rgb']},0.25); border-radius: 3px; }}
+</style>
+""", unsafe_allow_html=True)
 
-        /* Chat */
-        .stChatInputContainer {{
-            border: 1px solid rgba(128,128,128,0.2) !important;
-            border-radius: 12px !important;
-        }}
-        .stChatInputContainer:focus-within {{
-            border-color: var(--primary-color) !important;
-            box-shadow: 0 0 0 3px rgba(59,130,246,0.1) !important;
-        }}
-
-        /* Sidebar */
-        .sidebar-card {{
-            background: var(--secondary-background-color);
-            border: 1px solid rgba(128,128,128,0.12);
-            border-radius: 10px;
-            padding: 0.9rem;
-        }}
-        .sidebar-logo {{
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            margin-bottom: 0.4rem;
-        }}
-        .sidebar-desc {{
-            font-size: 0.78rem;
-            color: var(--text-color);
-            opacity: 0.5;
-            line-height: 1.6;
-        }}
-        .sidebar-tags {{
-            margin-top: 0.6rem;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-        }}
-        .sidebar-tag {{
-            background: rgba(128,128,128,0.08);
-            border: 1px solid rgba(128,128,128,0.18);
-            border-radius: 5px;
-            padding: 2px 7px;
-            font-size: 0.68rem;
-            color: var(--primary-color);
-        }}
-        .sidebar-dev {{
-            font-size: 0.7rem;
-            color: var(--text-color);
-            opacity: 0.3;
-            margin-top: 0.7rem;
-            padding-top: 0.5rem;
-            border-top: 1px solid rgba(128,128,128,0.1);
-        }}
-        .stButton > button {{
-            border-radius: 8px !important;
-        }}
-    </style>
-
-    <div class="hero">
-        <div class="hero-left">
-            <div class="hero-title-row">
-                <div class="hero-icon-wrap">
-                    <img src="{ICON_URI}" width="48" height="48" style="display:block; border-radius:12px;"/>
-                </div>
-                <div class="hero-title">TrafegoAI</div>
+st.markdown(f"""
+<div class="hero">
+    <div class="hero-left">
+        <div class="hero-title-row">
+            <div class="hero-icon-wrap">
+                <img src="{ICON_URI}" width="48" height="48" alt="TrafegoAI icon"/>
             </div>
-            <div class="hero-subtitle">Seu mentor de tráfego pago</div>
+            <div class="hero-title">TrafegoAI</div>
         </div>
-        <div class="status-badge">
-            <div class="status-dot"></div>
-            Online
-        </div>
+        <div class="hero-subtitle">Seu mentor de tr&aacute;fego pago</div>
     </div>
-    """,
-    unsafe_allow_html=True,
-)
+    <div class="status-badge">
+        <div class="status-dot"></div>
+        Online
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
 
 # ---------------------------------------------------------------------------
@@ -329,29 +380,35 @@ if prompt := st.chat_input("Faça sua pergunta aqui..."):
 # Sidebar - Informações
 # ---------------------------------------------------------------------------
 with st.sidebar:
-    st.markdown(
-        f"""
-        <div style="padding: 0.8rem 0 0.5rem 0;">
-            <div class="sidebar-card">
-                <div class="sidebar-logo">
-                    <img src="{ICON_URI}" width="20" height="20" style="display:inline-block; vertical-align:middle; border-radius:5px;"/>TrafegoAI
-                </div>
-                <div class="sidebar-desc">
-                    Agente de IA especializado em tráfego pago e estratégias de performance.
-                </div>
-                <div class="sidebar-tags">
-                    <span class="sidebar-tag">Facebook Ads</span>
-                    <span class="sidebar-tag">Google Ads</span>
-                    <span class="sidebar-tag">Performance</span>
-                </div>
-                <div class="sidebar-dev">Desenvolvido por Major · AI Developer</div>
+    st.markdown(f"""
+    <div style="padding: 0.5rem 0 0.2rem 0;">
+        <div class="sidebar-card">
+            <div class="sidebar-logo-row">
+                <img src="{ICON_URI}" width="24" height="24"
+                     style="display:block; flex-shrink:0; min-width:24px; min-height:24px;"/>
+                <span class="sidebar-logo-text">TrafegoAI</span>
             </div>
+            <div class="sidebar-desc">
+                Agente de IA especializado em tr&aacute;fego pago e estrat&eacute;gias de performance.
+            </div>
+            <div class="sidebar-tags">
+                <span class="sidebar-tag">Facebook Ads</span>
+                <span class="sidebar-tag">Google Ads</span>
+                <span class="sidebar-tag">Performance</span>
+            </div>
+            <div class="sidebar-dev">Desenvolvido por Major &middot; AI Developer</div>
         </div>
-        """,
-        unsafe_allow_html=True,
-    )
+    </div>
+    """, unsafe_allow_html=True)
+
     st.divider()
 
-    if st.button("Limpar conversa"):
-        st.session_state.messages = []
-        st.rerun()
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button(f"{C['theme_icon']} {C['theme_label']}", use_container_width=True):
+            st.session_state.theme = C['next_theme']
+            st.rerun()
+    with col2:
+        if st.button("\U0001f5d1\ufe0f Limpar", use_container_width=True):
+            st.session_state.messages = []
+            st.rerun()
