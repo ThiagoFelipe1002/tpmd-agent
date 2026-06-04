@@ -1,5 +1,5 @@
 """
-Interface Streamlit do TPMD Agent — Agente RAG de Tráfego Pago e Marketing Digital.
+Interface Streamlit do TrafegoAI — Agente RAG de Tráfego Pago.
 
 Uso:
     streamlit run app.py
@@ -33,13 +33,13 @@ def _secret(key: str, default: str | None = None) -> str | None:
 # Configuração da página
 # ---------------------------------------------------------------------------
 st.set_page_config(
-    page_title="TPMD Agent",
-    page_icon="📈",
+    page_title="TrafegoAI",
+    page_icon="🎯",
     layout="wide",
 )
 
-st.title("📈 TPMD Agent")
-st.caption("Tire suas dúvidas e faça perguntas")
+st.title("🎯 TrafegoAI")
+st.caption("Seu mentor de tráfego pago")
 
 
 # ---------------------------------------------------------------------------
@@ -161,9 +161,10 @@ with st.sidebar:
     st.subheader("ℹ️ Sobre")
     st.markdown(
         """
-        Este agente usa RAG (Retrieval-Augmented Generation) 
-        para responder perguntas sobre tráfego pago e marketing digital.
-        
+        **TrafegoAI** é um agente de inteligência artificial
+        especializado em tráfego pago — Facebook Ads, Google Ads
+        e estratégias de performance.
+
         **Desenvolvido por:**  
         Major - AI Developer
         """
