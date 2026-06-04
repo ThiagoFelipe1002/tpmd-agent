@@ -1,0 +1,19 @@
+# Segredos e configuração local
+.env
+.streamlit/secrets.toml
+
+# Pasta do curso (dados do cliente, não vai no repo)
+data/raw/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+
+# Logs e temporários
+*.log
+.DS_Store
+Thumbs.db
