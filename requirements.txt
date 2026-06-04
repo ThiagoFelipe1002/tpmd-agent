@@ -14,7 +14,7 @@ pdfplumber>=0.11.0
 webvtt-py>=0.4.6
 
 # Interface
-streamlit>=1.35.0
+streamlit==1.52.2
 
 # Utilities
 python-dotenv>=1.0.0

@@ -329,17 +329,8 @@ st.markdown(f"""
         filter: drop-shadow(0 0 6px rgba({C['accent_rgb']},0.7)) !important;
     }}
     button[data-testid="stChatInputSubmitButton"] svg {{
-        fill: currentColor !important;
         width: 28px !important;
         height: 28px !important;
-    }}
-    button[data-testid="stChatInputSubmitButton"] svg rect {{
-        fill: none !important;
-        stroke: none !important;
-    }}
-    button[data-testid="stChatInputSubmitButton"] svg path {{
-        fill: currentColor !important;
-        stroke: none !important;
     }}
     .sidebar-bottom-info {{
         position: fixed !important;
@@ -513,17 +504,8 @@ button[data-testid="stChatInputSubmitButton"]:focus-visible {{
   filter: drop-shadow(0 0 6px rgba({C['accent_rgb']},0.7)) !important;
 }}
 button[data-testid="stChatInputSubmitButton"] svg {{
-  fill: currentColor !important;
   width: 28px !important;
   height: 28px !important;
-}}
-button[data-testid="stChatInputSubmitButton"] svg rect {{
-  fill: none !important;
-  stroke: none !important;
-}}
-button[data-testid="stChatInputSubmitButton"] svg path {{
-  fill: currentColor !important;
-  stroke: none !important;
 }}
 /* Main menu popover — cover every layer including the inner white div */
 [data-testid="stMainMenuPopover"],
