@@ -7,11 +7,36 @@ Uso:
 
 import os
 import sys
+import base64
 from pathlib import Path
 
 import streamlit as st
 from dotenv import load_dotenv
 from langchain_core.messages import HumanMessage, AIMessage
+
+# ---------------------------------------------------------------------------
+# Ícone SVG como data URI (evita sanitização do Streamlit)
+# ---------------------------------------------------------------------------
+_SVG_ICON = """<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="48" x2="48" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1e3a8a" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#1d4ed8" stop-opacity="0.2"/>
+    </linearGradient>
+    <linearGradient id="bd" x1="0" y1="48" x2="48" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#93c5fd"/>
+    </linearGradient>
+    <linearGradient id="ar" x1="8" y1="36" x2="40" y2="12" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#bae6fd"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="44" height="44" rx="12" fill="url(#bg)" stroke="url(#bd)" stroke-width="1.5"/>
+  <polyline points="9,35 18,24 25,29 36,16" stroke="url(#ar)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <polyline points="30,13 37,16 34,23" stroke="url(#ar)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>"""
+ICON_URI = "data:image/svg+xml;base64," + base64.b64encode(_SVG_ICON.encode()).decode()
 
 sys.path.insert(0, str(Path(__file__).parent))
 
@@ -39,53 +64,45 @@ st.set_page_config(
 )
 
 st.markdown(
-    """
+    f"""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
-        html, body, [class*="css"] {
+        html, body, [class*="css"] {{
             font-family: 'Inter', sans-serif;
-        }
+        }}
 
-        .stApp {
+        .stApp {{
             background: linear-gradient(135deg, #0a0a0f 0%, #0d1117 50%, #080d14 100%);
-        }
+        }}
 
-        .block-container {
+        .block-container {{
             padding-top: 2rem !important;
-        }
+        }}
 
         /* Cabeçalho */
-        .hero {
+        .hero {{
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 1.4rem 0 1.2rem 0;
             border-bottom: 1px solid rgba(99,179,237,0.1);
             margin-bottom: 2rem;
-        }
-        .hero-left {
+        }}
+        .hero-left {{
             display: flex;
             flex-direction: column;
             gap: 3px;
-        }
-        .hero-title-row {
+        }}
+        .hero-title-row {{
             display: flex;
             align-items: center;
             gap: 12px;
-        }
-        .hero-icon-wrap {
+        }}
+        .hero-icon-wrap {{
             flex-shrink: 0;
-            width: 48px;
-            height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(37,99,235,0.12);
-            border: 1px solid rgba(99,179,237,0.28);
-            border-radius: 12px;
-        }
-        .hero-title {
+        }}
+        .hero-title {{
             font-size: 1.9rem;
             font-weight: 800;
             letter-spacing: -0.8px;
@@ -94,13 +111,13 @@ st.markdown(
             -webkit-text-fill-color: transparent;
             background-clip: text;
             line-height: 1.1;
-        }
-        .hero-subtitle {
+        }}
+        .hero-subtitle {{
             font-size: 0.85rem;
             color: rgba(255,255,255,0.35);
             letter-spacing: 0.3px;
-        }
-        .status-badge {
+        }}
+        .status-badge {{
             display: inline-flex;
             align-items: center;
             gap: 6px;
@@ -111,48 +128,51 @@ st.markdown(
             font-size: 0.72rem;
             color: #68D391;
             font-weight: 500;
-        }
-        .status-dot {
+        }}
+        .status-dot {{
             width: 6px;
             height: 6px;
             background: #68D391;
             border-radius: 50%;
             box-shadow: 0 0 6px #68D391;
             animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
+        }}
+        @keyframes pulse {{
+            0%, 100% {{ opacity: 1; }}
+            50% {{ opacity: 0.4; }}
+        }}
 
         /* Chat */
-        .stChatMessage {
+        .stChatMessage {{
             border-radius: 12px !important;
             border: 1px solid rgba(255,255,255,0.05) !important;
             background: rgba(255,255,255,0.02) !important;
-        }
-        .stChatInputContainer {
+        }}
+        .stChatInputContainer {{
             border: 1px solid rgba(99,179,237,0.2) !important;
             border-radius: 12px !important;
             background: rgba(10,15,25,0.9) !important;
-        }
-        .stChatInputContainer:focus-within {
+        }}
+        .stChatInputContainer:focus-within {{
             border-color: rgba(99,179,237,0.45) !important;
             box-shadow: 0 0 20px rgba(99,179,237,0.1) !important;
-        }
+        }}
 
         /* Sidebar */
-        [data-testid="stSidebar"] {
+        [data-testid="stSidebar"] {{
             background: rgba(8,13,20,0.98) !important;
             border-right: 1px solid rgba(99,179,237,0.07) !important;
-        }
-        .sidebar-card {
+        }}
+        .sidebar-card {{
             background: rgba(99,179,237,0.04);
             border: 1px solid rgba(99,179,237,0.1);
             border-radius: 10px;
             padding: 0.9rem;
-        }
-        .sidebar-logo {
+        }}
+        .sidebar-logo {{
+            display: flex;
+            align-items: center;
+            gap: 8px;
             font-size: 1rem;
             font-weight: 700;
             background: linear-gradient(90deg, #63B3ED, #BEE3F8);
@@ -160,49 +180,40 @@ st.markdown(
             -webkit-text-fill-color: transparent;
             background-clip: text;
             margin-bottom: 0.4rem;
-        }
-        .sidebar-desc {
+        }}
+        .sidebar-desc {{
             font-size: 0.78rem;
             color: rgba(255,255,255,0.38);
             line-height: 1.6;
-        }
-        .sidebar-tags {
+        }}
+        .sidebar-tags {{
             margin-top: 0.6rem;
             display: flex;
             flex-wrap: wrap;
             gap: 4px;
-        }
-        .sidebar-tag {
+        }}
+        .sidebar-tag {{
             background: rgba(99,179,237,0.08);
             border: 1px solid rgba(99,179,237,0.18);
             border-radius: 5px;
             padding: 2px 7px;
             font-size: 0.68rem;
             color: #90CDF4;
-        }
-        .sidebar-dev {
+        }}
+        .sidebar-dev {{
             font-size: 0.7rem;
             color: rgba(255,255,255,0.18);
             margin-top: 0.7rem;
             padding-top: 0.5rem;
             border-top: 1px solid rgba(255,255,255,0.05);
-        }
+        }}
     </style>
 
     <div class="hero">
         <div class="hero-left">
             <div class="hero-title-row">
                 <div class="hero-icon-wrap">
-                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <defs>
-                        <linearGradient id="g1" x1="2" y1="24" x2="26" y2="4" gradientUnits="userSpaceOnUse">
-                          <stop offset="0%" stop-color="#3B82F6"/>
-                          <stop offset="100%" stop-color="#BAE6FD"/>
-                        </linearGradient>
-                      </defs>
-                      <polyline points="2,22 9,13 15,17 24,6" stroke="url(#g1)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-                      <polyline points="18,4 25,6 23,13" stroke="url(#g1)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-                    </svg>
+                    <img src="{ICON_URI}" width="48" height="48" style="display:block; border-radius:12px;"/>
                 </div>
                 <div class="hero-title">TrafegoAI</div>
             </div>
@@ -334,19 +345,26 @@ if prompt := st.chat_input("Faça sua pergunta aqui..."):
 # ---------------------------------------------------------------------------
 with st.sidebar:
     st.markdown(
-        """
+        f"""
         <div style="padding: 0.8rem 0 0.5rem 0;">
             <div class="sidebar-card">
                 <div class="sidebar-logo">
-                    <svg width="18" height="18" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block; vertical-align:middle; margin-right:6px; margin-bottom:2px; overflow:visible;">
-                      <defs><linearGradient id="sg" x1="0" y1="40" x2="40" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#2563EB"/><stop offset="100%" stop-color="#93C5FD"/></linearGradient></defs>
-                      <rect x="1" y="1" width="38" height="38" rx="11" fill="rgba(37,99,235,0.12)" stroke="url(#sg)" stroke-width="1.5"/>
-                      <polyline points="7,30 15,20 21,25 29,14" stroke="url(#sg)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-                      <polyline points="25,11 31,14 28,20" stroke="url(#sg)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-                    </svg>TrafegoAI
+                    <img src="{ICON_URI}" width="20" height="20" style="display:inline-block; vertical-align:middle; border-radius:5px;"/>TrafegoAI
                 </div>
                 <div class="sidebar-desc">
                     Agente de IA especializado em tráfego pago e estratégias de performance.
+                </div>
+                <div class="sidebar-tags">
+                    <span class="sidebar-tag">Facebook Ads</span>
+                    <span class="sidebar-tag">Google Ads</span>
+                    <span class="sidebar-tag">Performance</span>
+                </div>
+                <div class="sidebar-dev">Desenvolvido por Major · AI Developer</div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
                 </div>
                 <div class="sidebar-tags">
                     <span class="sidebar-tag">Facebook Ads</span>
