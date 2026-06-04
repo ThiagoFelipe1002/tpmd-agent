@@ -164,11 +164,8 @@ with st.sidebar:
         Este agente usa RAG (Retrieval-Augmented Generation) 
         para responder perguntas sobre tráfego pago e marketing digital.
         
-        **Tecnologias:**
-        - LangGraph (agente)
-        - FAISS (busca vetorial)
-        - GPT-4.1-mini (geração)
-        - OpenAI Embeddings
+        **Desenvolvido por:**
+        Major - AI Developer
         """
     )
 
