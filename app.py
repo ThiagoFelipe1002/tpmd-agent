@@ -38,8 +38,15 @@ st.set_page_config(
     layout="wide",
 )
 
-st.title("🎯 TrafegoAI")
-st.caption("Seu mentor de tráfego pago")
+st.markdown(
+    """
+    <h1 style="margin-bottom:0;">🎯 TrafegoAI</h1>
+    <p style="margin-top:0; padding-left:3.2rem; color:rgba(250,250,250,0.5); font-size:0.95rem;">
+        Seu mentor de tráfego pago
+    </p>
+    """,
+    unsafe_allow_html=True,
+)
 
 
 # ---------------------------------------------------------------------------
