@@ -296,16 +296,28 @@ st.markdown(f"""
                     0 0 20px rgba({C['accent_rgb']},0.15) !important;
     }}
     [data-testid="stChatInputSubmitButton"] button {{
-        background: {C['accent']} !important;
+        background: linear-gradient(135deg, {C['accent']}, #60a5fa) !important;
         color: #ffffff !important;
         border: none !important;
-        border-radius: 8px !important;
-        box-shadow: 0 0 10px rgba({C['accent_rgb']},0.5),
-                    0 0 20px rgba({C['accent_rgb']},0.2) !important;
+        border-radius: 10px !important;
+        box-shadow: 0 0 14px rgba({C['accent_rgb']},0.7),
+                    0 0 30px rgba({C['accent_rgb']},0.35) !important;
+        transition: transform 0.15s ease, box-shadow 0.15s ease !important;
     }}
-    [data-testid="stChatInputSubmitButton"] button svg {{
+    [data-testid="stChatInputSubmitButton"] button:hover {{
+        transform: scale(1.08) !important;
+        box-shadow: 0 0 20px rgba({C['accent_rgb']},0.9),
+                    0 0 40px rgba({C['accent_rgb']},0.5) !important;
+    }}
+    [data-testid="stChatInputSubmitButton"] button svg,
+    [data-testid="stChatInputSubmitButton"] button svg *,
+    [data-testid="stChatInputSubmitButton"] button svg path,
+    [data-testid="stChatInputSubmitButton"] button svg polyline,
+    [data-testid="stChatInputSubmitButton"] button svg polygon,
+    [data-testid="stChatInputSubmitButton"] button svg circle {{
         fill: #ffffff !important;
         stroke: #ffffff !important;
+        color: #ffffff !important;
     }}
     .sidebar-card {{
         background: {C['card_bg']};
@@ -375,12 +387,21 @@ _inject_css = f"""\
   caret-color: {C['accent']} !important;
 }}
 [data-testid="stBottom"] [data-testid="stChatInputSubmitButton"] button {{
-  background-color: {C['accent']} !important;
+  background: linear-gradient(135deg, {C['accent']}, #60a5fa) !important;
   border: none !important;
-  border-radius: 8px !important;
-  box-shadow: 0 0 10px rgba({C['accent_rgb']},0.55),0 0 20px rgba({C['accent_rgb']},0.28) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 0 14px rgba({C['accent_rgb']},0.7),0 0 30px rgba({C['accent_rgb']},0.35) !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease !important;
 }}
-[data-testid="stBottom"] [data-testid="stChatInputSubmitButton"] button * {{
+[data-testid="stBottom"] [data-testid="stChatInputSubmitButton"] button:hover {{
+  transform: scale(1.08) !important;
+  box-shadow: 0 0 20px rgba({C['accent_rgb']},0.9),0 0 40px rgba({C['accent_rgb']},0.5) !important;
+}}
+[data-testid="stBottom"] [data-testid="stChatInputSubmitButton"] button *,
+[data-testid="stBottom"] [data-testid="stChatInputSubmitButton"] button svg,
+[data-testid="stBottom"] [data-testid="stChatInputSubmitButton"] button svg path,
+[data-testid="stBottom"] [data-testid="stChatInputSubmitButton"] button svg polyline,
+[data-testid="stBottom"] [data-testid="stChatInputSubmitButton"] button svg circle {{
   background-color: transparent !important;
   color: #fff !important;
   fill: #fff !important;
