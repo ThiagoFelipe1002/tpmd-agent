@@ -156,7 +156,7 @@ _extra_css = f"""
     }}
     [data-testid="stChatInputContainer"]:focus-within {{
         border-color: {C['accent']} !important;
-        box-shadow: 0 0 0 3px rgba({C['accent_rgb']},0.15) !important;
+        box-shadow: 0 0 0 3px rgba({C['accent_rgb']},0.15), 0 0 20px rgba({C['accent_rgb']},0.25) !important;
     }}
     textarea, [data-testid="stChatInputTextArea"] {{
         background-color: {C['input_bg']} !important;
@@ -168,6 +168,12 @@ _extra_css = f"""
         color: #fff !important;
         border: none !important;
         border-radius: 8px !important;
+        box-shadow: 0 0 12px rgba({C['accent_rgb']},0.6), 0 0 24px rgba({C['accent_rgb']},0.3) !important;
+    }}
+    [data-testid="stChatInputSubmitButton"] button svg {{
+        fill: #ffffff !important;
+        color: #ffffff !important;
+        stroke: #ffffff !important;
     }}
 """ if _dark else """"""
 
@@ -220,7 +226,7 @@ st.markdown(f"""
     }}
     .status-dot {{
         width: 7px; height: 7px; background: {C['status_dot']};
-        border-radius: 50%; box-shadow: 0 0 8px {C['status_dot']};
+        border-radius: 50%; box-shadow: 0 0 8px {C['status_dot']}, 0 0 16px {C['status_dot']};
         animation: pulse 2s infinite;
     }}
     @keyframes pulse {{
@@ -258,13 +264,19 @@ st.markdown(f"""
     }}
     .stChatInputContainer:focus-within {{
         border-color: {C['accent']} !important;
-        box-shadow: 0 0 0 3px rgba({C['accent_rgb']},0.12) !important;
+        box-shadow: 0 0 0 3px rgba({C['accent_rgb']},0.12), 0 0 20px rgba({C['accent_rgb']},0.15) !important;
     }}
     [data-testid="stChatInputSubmitButton"] button {{
         background: {C['accent']} !important;
         color: #ffffff !important;
         border: none !important;
         border-radius: 8px !important;
+        box-shadow: 0 0 12px rgba({C['accent_rgb']},0.5), 0 0 24px rgba({C['accent_rgb']},0.2) !important;
+    }}
+    [data-testid="stChatInputSubmitButton"] button svg {{
+        fill: #ffffff !important;
+        color: #ffffff !important;
+        stroke: #ffffff !important;
     }}
     .sidebar-card {{
         background: {C['card_bg']};
@@ -471,6 +483,6 @@ with st.sidebar:
             st.session_state.theme = C['next_theme']
             st.rerun()
     with col2:
-        if st.button("\U0001f5d1\ufe0f Limpar", use_container_width=True):
+        if st.button("🗑️ Limpar conversa", use_container_width=True):
             st.session_state.messages = []
             st.rerun()
