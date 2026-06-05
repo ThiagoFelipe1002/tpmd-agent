@@ -48,6 +48,11 @@ _OFF_TOPIC_RESPONSE = (
 _CONFIRM_WORDS = {"sim", "isso", "exato", "isso mesmo", "s", "yes", "correto", "isso aí", "pode ser", "é isso"}
 
 
+def _normalize_input(text: str) -> str:
+    """Strip, lowercase, and remove trailing punctuation for comparison."""
+    return text.strip().lower().rstrip(".,!?;:")
+
+
 def _is_on_topic(text: str) -> bool:
     """Verifica se a pergunta é sobre tráfego pago / marketing digital."""
     text_lower = text.lower()
@@ -121,7 +126,7 @@ def make_retrieve_node(vectorstore: FAISS, k: int = 6):
         query = last_human.content
 
         # Se o usuário confirmou uma sugestão anterior, usa o termo sugerido
-        if query.strip().lower() in _CONFIRM_WORDS:
+        if _normalize_input(query) in _CONFIRM_WORDS:
             suggested = _extract_suggestion_from_last_ai(state["messages"])
             if suggested:
                 query = suggested
@@ -170,7 +175,7 @@ def make_generate_node(
         )
         if not docs and last_human and not _is_on_topic(last_human.content):
             # Não tratar como off-topic se o usuário estava confirmando uma sugestão
-            is_confirmation = last_human.content.strip().lower() in _CONFIRM_WORDS
+            is_confirmation = _normalize_input(last_human.content) in _CONFIRM_WORDS
             if not is_confirmation:
                 suggestion = _find_typo_suggestion(last_human.content)
                 if suggestion:
