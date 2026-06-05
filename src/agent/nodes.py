@@ -45,6 +45,8 @@ _OFF_TOPIC_RESPONSE = (
     "de performance em marketing digital."
 )
 
+_CONFIRM_WORDS = {"sim", "isso", "exato", "isso mesmo", "s", "yes", "correto", "isso aí", "pode ser", "é isso"}
+
 
 def _is_on_topic(text: str) -> bool:
     """Verifica se a pergunta é sobre tráfego pago / marketing digital."""
@@ -95,8 +97,6 @@ def make_retrieve_node(vectorstore: FAISS, k: int = 6):
         Função node para o grafo LangGraph.
     """
     retriever = vectorstore.as_retriever(search_kwargs={"k": k})
-
-    _CONFIRM_WORDS = {"sim", "isso", "exato", "isso mesmo", "s", "yes", "correto", "isso aí", "pode ser", "é isso"}
 
     def _extract_suggestion_from_last_ai(messages) -> str | None:
         """Se a última mensagem do assistente foi uma sugestão de typo, extrai o termo sugerido."""
@@ -170,7 +170,8 @@ def make_generate_node(
         )
         if not docs and last_human and not _is_on_topic(last_human.content):
             # Não tratar como off-topic se o usuário estava confirmando uma sugestão
-            if last_human.content.strip().lower() not in _CONFIRM_WORDS:
+            is_confirmation = last_human.content.strip().lower() in _CONFIRM_WORDS
+            if not is_confirmation:
                 suggestion = _find_typo_suggestion(last_human.content)
                 if suggestion:
                     reply = f"Não encontrei exatamente o que você digitou. Você quis dizer \"{suggestion}\"?"
