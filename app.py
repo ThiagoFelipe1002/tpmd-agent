@@ -136,6 +136,14 @@ _extra_css = f"""
         display: none !important;
         visibility: hidden !important;
     }}
+    /* -- Hide Streamlit footer branding -- */
+    footer, [data-testid="stStatusWidget"],
+    .viewerBadge_container__r5tak,
+    .stApp > footer,
+    [data-testid="manage-app-button"] {{
+        display: none !important;
+        visibility: hidden !important;
+    }}
     /* -- Dark: toolbar icons -- */
     [data-testid="stHeader"] button,
     [data-testid="stHeader"] a {{
