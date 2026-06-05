@@ -219,6 +219,14 @@ st.markdown(f"""
         background: {C['app_bg']} !important;
     }}
     .block-container {{ padding: 1.5rem 2rem 1rem 2rem !important; max-width: 100% !important; }}
+    /* Quando sidebar colapsada, main ocupa toda a largura */
+    [data-testid="stSidebar"][aria-expanded="false"] ~ [data-testid="stMain"],
+    [data-testid="stSidebar"][aria-expanded="false"] ~ [data-testid="stAppViewContainer"] {{
+        margin-left: 0 !important;
+    }}
+    [data-testid="stMain"] {{
+        transition: margin-left 0.3s ease !important;
+    }}
     [data-testid="stHeader"] {{
         background: {C['app_bg']} !important;
         border-bottom: 1px solid {C['border']} !important;
@@ -361,22 +369,23 @@ st.markdown(f"""
         padding-top: 0.65rem; border-top: 1px solid {C['divider']};
         overflow-wrap: normal !important; word-break: normal !important;
     }}
-    [data-testid="stSidebar"] {{
+    [data-testid="stSidebar"][aria-expanded="true"] {{
         min-width: 220px !important;
     }}
     [data-testid="stSidebar"] > div {{
         padding-left: 1rem !important;
         padding-right: 1rem !important;
+        padding-top: 0.5rem !important;
     }}
     .sidebar-actions-title {{
         color: {C['text_muted']} !important; font-size: 0.68rem !important;
         font-weight: 800 !important; text-transform: uppercase !important;
         letter-spacing: 0.09em !important;
-        margin: 0.25rem 0 0.65rem 0 !important;
+        margin: 0 0 0.5rem 0.1rem !important;
         padding-left: 0 !important;
     }}
     [data-testid="stSidebar"] .stButton {{
-        margin-bottom: 0.7rem !important;
+        margin-bottom: 0.55rem !important;
         padding-left: 0 !important;
         padding-right: 0 !important;
     }}
@@ -417,6 +426,38 @@ st.markdown(f"""
     hr {{ border-color: {C['divider']} !important; }}
     ::-webkit-scrollbar {{ width: 5px; }}
     ::-webkit-scrollbar-thumb {{ background: rgba({C['accent_rgb']},0.25); border-radius: 3px; }}
+    /* Expander (referências) */
+    [data-testid="stExpander"] {{
+        background: rgba({C['accent_rgb']},0.04) !important;
+        border: 1px solid rgba({C['accent_rgb']},0.15) !important;
+        border-radius: 10px !important;
+        box-shadow: none !important;
+    }}
+    [data-testid="stExpander"] summary,
+    [data-testid="stExpander"] summary span,
+    [data-testid="stExpander"] summary p,
+    [data-testid="stExpander"] [data-testid="stMarkdownContainer"] p {{
+        color: {C['text_muted']} !important;
+        font-size: 0.82rem !important;
+        font-weight: 600 !important;
+        background: transparent !important;
+    }}
+    [data-testid="stExpander"] summary:hover,
+    [data-testid="stExpander"] summary:hover span {{
+        color: {C['text']} !important;
+    }}
+    [data-testid="stExpander"] summary svg {{
+        color: {C['text_muted']} !important;
+        fill: {C['text_muted']} !important;
+    }}
+    [data-testid="stExpander"] [data-testid="stExpanderDetails"] {{
+        background: transparent !important;
+    }}
+    [data-testid="stExpander"] [data-testid="stExpanderDetails"] p,
+    [data-testid="stExpander"] [data-testid="stExpanderDetails"] li {{
+        color: {C['text_muted']} !important;
+        font-size: 0.8rem !important;
+    }}
     .custom-loading {{
         display: inline-flex;
         align-items: center;
@@ -606,6 +647,73 @@ button[data-testid="stChatInputSubmitButton"] svg {{
   color: {C['text']} !important;
   font-size: 0.85rem !important;
 }}
+/* Modals / Dialogs (Settings, Clear Caches) */
+[role="dialog"],
+[role="dialog"] > div {{
+  background-color: {C['card_bg']} !important;
+  border: 1px solid rgba({C['accent_rgb']},0.2) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.6) !important;
+  color: {C['text']} !important;
+}}
+[role="dialog"] h1,
+[role="dialog"] h2,
+[role="dialog"] h3,
+[role="dialog"] p,
+[role="dialog"] span,
+[role="dialog"] label,
+[role="dialog"] li {{
+  color: {C['text']} !important;
+}}
+[role="dialog"] [data-baseweb="modal-header"],
+[role="dialog"] [data-baseweb="modal-body"],
+[role="dialog"] [data-baseweb="modal-footer"] {{
+  background-color: {C['card_bg']} !important;
+}}
+[role="dialog"] button {{
+  background: rgba({C['accent_rgb']},0.08) !important;
+  border: 1px solid rgba({C['accent_rgb']},0.25) !important;
+  color: {C['text']} !important;
+  border-radius: 8px !important;
+}}
+[role="dialog"] button:hover {{
+  background: rgba({C['accent_rgb']},0.16) !important;
+  border-color: rgba({C['accent_rgb']},0.5) !important;
+}}
+/* Modal close button (X) */
+[role="dialog"] button[aria-label="Close"],
+[role="dialog"] [data-testid="stModalCloseButton"] {{
+  background: transparent !important;
+  border: none !important;
+  color: {C['text_muted']} !important;
+}}
+[role="dialog"] button[aria-label="Close"]:hover {{
+  color: {C['text']} !important;
+  background: rgba({C['accent_rgb']},0.1) !important;
+}}
+/* Modal backdrop */
+[data-baseweb="modal-backdrop"],
+div[class*="backdrop"] {{
+  background-color: rgba(0,0,0,0.6) !important;
+}}
+/* Select/dropdown inside modals */
+[role="dialog"] [data-baseweb="select"],
+[role="dialog"] [data-baseweb="select"] > div {{
+  background-color: {C['app_bg']} !important;
+  border: 1px solid rgba({C['accent_rgb']},0.25) !important;
+  color: {C['text']} !important;
+  border-radius: 8px !important;
+}}
+/* Checkbox in modals */
+[role="dialog"] [data-baseweb="checkbox"] span {{
+  background-color: transparent !important;
+  border-color: rgba({C['accent_rgb']},0.4) !important;
+}}
+/* Section headers in Settings */
+[role="dialog"] h2 {{
+  color: {C['accent']} !important;
+  font-size: 0.9rem !important;
+}}
 """ if _dark else ""
 
 components.html(
@@ -707,14 +815,7 @@ with hero_left_col:
     """, unsafe_allow_html=True)
 
 with hero_status_col:
-    st.markdown(f"""
-    <div style="display:flex;align-items:center;height:100%;padding-top:0.9rem;justify-content:flex-end;">
-        <div class="status-badge">
-            <div class="status-dot"></div>
-            Online
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    _status_placeholder = st.empty()
 
 st.markdown(f'<div style="border-bottom:1px solid {C["border"]};margin-bottom:1.6rem;"></div>', unsafe_allow_html=True)
 
@@ -772,6 +873,26 @@ _loading.markdown('<div class="custom-loading"><div class="custom-loading-dot"><
 agent, error_msg = load_agent()
 _loading.empty()
 
+# Atualiza badge de status no header
+if error_msg:
+    _status_placeholder.markdown(f"""
+    <div style="display:flex;align-items:center;justify-content:flex-end;padding-top:1.1rem;">
+        <div class="status-badge" style="background:rgba(239,68,68,0.08);border-color:rgba(239,68,68,0.2);">
+            <div class="status-dot" style="background:#ef4444;box-shadow:0 0 8px #ef4444,0 0 16px #ef4444;animation:none;"></div>
+            <span style="color:#f87171;">Offline</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+else:
+    _status_placeholder.markdown(f"""
+    <div style="display:flex;align-items:center;justify-content:flex-end;padding-top:1.1rem;">
+        <div class="status-badge">
+            <div class="status-dot"></div>
+            Online
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
 if error_msg:
     st.error(error_msg)
     st.stop()
@@ -813,21 +934,27 @@ if prompt := st.chat_input("Faça sua pergunta aqui..."):
                 )
                 response = result["messages"][-1].content
 
-                # Exibe fontes consultadas (opcional, na sidebar)
-                if result.get("context"):
-                    with st.sidebar:
-                        st.subheader("📚 Fontes consultadas")
-                        seen = set()
-                        for doc in result["context"]:
-                            ref = f"**{doc.metadata.get('module', '')}** / {doc.metadata.get('lesson', '')}"
-                            if ref not in seen:
-                                st.markdown(f"- {ref}")
-                                seen.add(ref)
-
             except Exception as e:
                 response = f"Erro ao processar a pergunta: {e}"
+                result = {}
 
         st.markdown(response)
+
+        # Referências abaixo da resposta
+        if result.get("context"):
+            seen = set()
+            refs = []
+            for doc in result["context"]:
+                module = doc.metadata.get("module", "")
+                lesson = doc.metadata.get("lesson", "")
+                ref = f"{module} / {lesson}" if module and lesson else (module or lesson)
+                if ref and ref not in seen:
+                    refs.append(ref)
+                    seen.add(ref)
+            if refs:
+                with st.expander("📚 Referências", expanded=False):
+                    for ref in refs:
+                        st.markdown(f"- {ref}")
 
     # Salva resposta no histórico
     st.session_state.messages.append(AIMessage(content=response))
