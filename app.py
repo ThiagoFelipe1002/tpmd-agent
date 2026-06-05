@@ -140,9 +140,24 @@ _extra_css = f"""
     footer, [data-testid="stStatusWidget"],
     .viewerBadge_container__r5tak,
     .stApp > footer,
-    [data-testid="manage-app-button"] {{
+    [data-testid="manage-app-button"],
+    .viewerBadge_link__qRIco,
+    ._profilePreview_51w34_1,
+    [data-testid="stAppDeployButton"],
+    a[href="https://streamlit.io"],
+    div[class*="hostingBadge"],
+    div[class*="viewerBadge"],
+    div[class*="StatusWidget"],
+    #stStreamlitBadge,
+    ._container_51w34_1,
+    div[class*="_profilePreview"],
+    div[class*="stCreatorProfile"] {{
         display: none !important;
         visibility: hidden !important;
+        height: 0 !important;
+        overflow: hidden !important;
+        position: absolute !important;
+        pointer-events: none !important;
     }}
     /* -- Dark: toolbar icons -- */
     [data-testid="stHeader"] button,
