@@ -836,11 +836,9 @@ components.html(
 # ---------------------------------------------------------------------------
 # Header / Hero
 # ---------------------------------------------------------------------------
-hero_left_col, hero_status_col = st.columns([3, 1])
-
-with hero_left_col:
-    st.markdown(f"""
-    <div class="hero-left" style="padding:0.8rem 0 0.9rem 0;">
+st.markdown(f"""
+<div class="hero-row" style="display:flex;align-items:center;justify-content:space-between;padding:0.8rem 0 0.9rem 0;flex-wrap:wrap;gap:0.5rem;">
+    <div class="hero-left">
         <div class="hero-icon-wrap">
             <img src="{ICON_URI}" width="44" height="44" alt="TráfegoAI icon"/>
         </div>
@@ -849,10 +847,11 @@ with hero_left_col:
             <div class="hero-subtitle">Seu mentor de tr&aacute;fego pago</div>
         </div>
     </div>
-    """, unsafe_allow_html=True)
+    <div id="status-badge-slot"></div>
+</div>
+""", unsafe_allow_html=True)
 
-with hero_status_col:
-    _status_placeholder = st.empty()
+_status_placeholder = st.empty()
 
 st.markdown(f'<div style="border-bottom:1px solid {C["border"]};margin-bottom:1.6rem;"></div>', unsafe_allow_html=True)
 
@@ -913,7 +912,7 @@ _loading.empty()
 # Atualiza badge de status no header
 if error_msg:
     _status_placeholder.markdown(f"""
-    <div style="display:flex;align-items:center;justify-content:flex-end;height:100%;min-height:60px;">
+    <div style="display:flex;justify-content:flex-end;">
         <div class="status-badge" style="background:rgba(239,68,68,0.08);border-color:rgba(239,68,68,0.2);">
             <div class="status-dot" style="background:#ef4444;box-shadow:0 0 8px #ef4444,0 0 16px #ef4444;animation:none;"></div>
             <span style="color:#f87171;">Offline</span>
@@ -922,7 +921,7 @@ if error_msg:
     """, unsafe_allow_html=True)
 else:
     _status_placeholder.markdown(f"""
-    <div style="display:flex;align-items:center;justify-content:flex-end;height:100%;min-height:60px;">
+    <div style="display:flex;justify-content:flex-end;">
         <div class="status-badge">
             <div class="status-dot"></div>
             Online
