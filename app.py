@@ -62,6 +62,7 @@ st.set_page_config(
     page_title="TráfegoAI",
     page_icon="📈",
     layout="wide",
+    initial_sidebar_state="collapsed",
 )
 
 # ---------------------------------------------------------------------------
@@ -128,6 +129,13 @@ else:
 # CSS extra condicional: dark mode precisa sobrescrever toolbar do Streamlit
 # que renderiza com base="light" (icons/texto dark por padrão)
 _extra_css = f"""
+    /* -- Hide toolbar menu button -- */
+    #MainMenu,
+    [data-testid="stToolbar"] [data-testid="stToolbarActions"],
+    [data-testid="stDecoration"] {{
+        display: none !important;
+        visibility: hidden !important;
+    }}
     /* -- Dark: toolbar icons -- */
     [data-testid="stHeader"] button,
     [data-testid="stHeader"] a {{
@@ -247,7 +255,10 @@ st.markdown(f"""
     }}
     .hero-left {{ display: flex; flex-direction: row; align-items: center; gap: 14px; }}
     .hero-text-col {{ display: flex; flex-direction: column; gap: 2px; }}
-    .hero-icon-wrap {{ flex-shrink: 0; width: 44px; height: 44px; line-height: 0; overflow: visible !important; }}
+    .hero-icon-wrap {{
+        flex-shrink: 0; width: 44px; height: 44px; line-height: 0; overflow: visible !important;
+        background: #0f172a; border-radius: 12px;
+    }}
     .hero-icon-wrap img {{
         width: 44px !important; height: 44px !important;
         min-width: 44px !important; min-height: 44px !important;
@@ -342,13 +353,14 @@ st.markdown(f"""
     }}
     .sidebar-bottom-info {{
         position: fixed !important;
-        left: 1.5rem !important;
+        left: 0 !important;
         bottom: 1.5rem !important;
-        width: 200px !important;
+        width: 220px !important;
+        padding: 0 1rem !important;
+        box-sizing: border-box !important;
         background: transparent !important;
         border: none !important;
         box-shadow: none !important;
-        padding: 0 !important;
     }}
     .sidebar-logo-row {{ display: flex; align-items: center; gap: 9px; margin-bottom: 0.65rem; }}
     .sidebar-logo-text {{
@@ -365,50 +377,73 @@ st.markdown(f"""
         font-size: 0.66rem; color: {C['tag_text']}; font-weight: 600;
     }}
     .sidebar-dev {{
-        font-size: 0.66rem; color: {C['text_muted']}; opacity: 0.55;
+        font-size: 0.66rem; color: {C['text_muted']}; opacity: {'0.55' if _dark else '0.85'};
         padding-top: 0.65rem; border-top: 1px solid {C['divider']};
         overflow-wrap: normal !important; word-break: normal !important;
+        text-align: center !important;
     }}
+
+
     [data-testid="stSidebar"][aria-expanded="true"] {{
         min-width: 220px !important;
+        max-width: 220px !important;
+    }}
+    [data-testid="stSidebar"] > div:first-child {{
+        resize: none !important;
+    }}
+    [data-testid="stSidebarUserContent"] {{
+        resize: none !important;
     }}
     [data-testid="stSidebar"] > div {{
-        padding-left: 1rem !important;
-        padding-right: 1rem !important;
+        padding-left: 0.8rem !important;
+        padding-right: 0.8rem !important;
         padding-top: 0.5rem !important;
     }}
+    [data-testid="stSidebarContent"] {{
+        padding-left: 0.8rem !important;
+        padding-right: 0.8rem !important;
+    }}
     .sidebar-actions-title {{
-        color: {C['text_muted']} !important; font-size: 0.68rem !important;
+        color: {C['text_muted']} !important; font-size: 0.76rem !important;
         font-weight: 800 !important; text-transform: uppercase !important;
         letter-spacing: 0.09em !important;
-        margin: 0 0 0.5rem 0.1rem !important;
+        margin: 0 0 0.4rem 0.1rem !important;
         padding-left: 0 !important;
     }}
+    .sidebar-actions-title-spaced {{
+        margin-top: 0.7rem !important;
+    }}
+    /* Toggle styling */
+    [data-testid="stSidebar"] .stToggle {{
+        margin-bottom: 0.5rem !important;
+    }}
+    [data-testid="stSidebar"] .stToggle label span {{
+        font-size: 0.85rem !important;
+        font-weight: 500 !important;
+    }}
+    /* Clear chat button: small and subtle */
     [data-testid="stSidebar"] .stButton {{
-        margin-bottom: 0.55rem !important;
+        margin-bottom: 0 !important;
+        margin-top: 0 !important;
         padding-left: 0 !important;
         padding-right: 0 !important;
     }}
     [data-testid="stSidebar"] .stButton button {{
-        height: 40px !important;
+        height: 32px !important;
         width: 100% !important;
-        background: rgba({C['accent_rgb']},0.065) !important;
-        border: 1px solid rgba({C['accent_rgb']},0.28) !important;
-        color: {C['text']} !important;
+        background: transparent !important;
+        border: none !important;
+        color: {C['text_muted']} !important;
         border-radius: 10px !important; font-weight: 600 !important;
-        font-size: 0.85rem !important; justify-content: center !important;
-        padding: 0 1rem !important; box-shadow: none !important;
+        font-size: 0.85rem !important; justify-content: flex-start !important;
+        padding: 0 0.5rem !important; box-shadow: none !important;
         transition: all 0.18s ease !important; white-space: nowrap !important;
     }}
     [data-testid="stSidebar"] .stButton button:hover {{
-        background: rgba({C['accent_rgb']},0.14) !important;
-        border-color: rgba({C['accent_rgb']},0.5) !important;
+        background: rgba({C['accent_rgb']},0.08) !important;
         color: {C['text']} !important;
-        box-shadow: 0 0 12px rgba({C['accent_rgb']},0.14) !important;
-        transform: translateY(-1px);
     }}
     [data-testid="stSidebar"] .stButton button:active {{
-        transform: translateY(0);
         box-shadow: none !important;
     }}
     [data-testid="stMain"] .stButton button {{
@@ -786,6 +821,8 @@ components.html(
       btn.style.setProperty('align-items', 'center', 'important');
       btn.style.setProperty('justify-content', 'center', 'important');
     }}
+
+
   }}
   inject();
   setTimeout(inject, 600);
@@ -964,15 +1001,11 @@ if prompt := st.chat_input("Faça sua pergunta aqui..."):
 # Sidebar - Ações e informações
 # ---------------------------------------------------------------------------
 with st.sidebar:
-    # Ações no topo
-    st.markdown('<p class="sidebar-actions-title">Ações rápidas</p>', unsafe_allow_html=True)
-
-    if st.button(f"{C['theme_icon']}  {C['theme_label']}", use_container_width=True):
-        st.session_state.theme = C['next_theme']
-        st.rerun()
-
-    if st.button("🗑️  Limpar conversa", use_container_width=True):
-        st.session_state.messages = []
+    # Toggle de tema
+    st.markdown('<p class="sidebar-actions-title">Aparência</p>', unsafe_allow_html=True)
+    dark_mode = st.toggle("Modo Escuro", value=_dark, key="theme_toggle")
+    if dark_mode != _dark:
+        st.session_state.theme = "dark" if dark_mode else "light"
         st.rerun()
 
     # Informações fixas no rodapé
@@ -980,7 +1013,7 @@ with st.sidebar:
     <div class="sidebar-bottom-info">
         <div class="sidebar-logo-row">
             <img src="{ICON_URI}" width="24" height="24"
-                 style="display:block; flex-shrink:0; min-width:24px; min-height:24px;"/>
+                 style="display:block; flex-shrink:0; min-width:24px; min-height:24px; background:#0f172a; border-radius:6px;"/>
             <span class="sidebar-logo-text">Tr&aacute;fegoAI</span>
         </div>
         <div class="sidebar-desc">
@@ -994,3 +1027,9 @@ with st.sidebar:
         <div class="sidebar-dev">Desenvolvido por Major &middot; AI Developer</div>
     </div>
     """, unsafe_allow_html=True)
+
+    # Título Ações
+    st.markdown('<p class="sidebar-actions-title sidebar-actions-title-spaced">Ações</p>', unsafe_allow_html=True)
+    if st.button("Iniciar novo chat", key="clear_chat", use_container_width=True):
+        st.session_state.messages = []
+        st.rerun()
