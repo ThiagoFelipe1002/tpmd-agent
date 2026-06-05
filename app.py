@@ -837,7 +837,7 @@ components.html(
 # Header / Hero
 # ---------------------------------------------------------------------------
 st.markdown(f"""
-<div class="hero-row" style="position:relative;display:flex;align-items:center;justify-content:center;padding:2.0rem 0 1.2rem 0;min-height:60px;">
+<div class="hero-row" style="position:relative;display:flex;align-items:center;justify-content:flex-start;padding:2.0rem 0 1.2rem 0;min-height:60px;">
     <div class="hero-left">
         <div class="hero-icon-wrap">
             <img src="{ICON_URI}" width="44" height="44" alt="TráfegoAI icon"/>
