@@ -837,7 +837,7 @@ components.html(
 # Header / Hero
 # ---------------------------------------------------------------------------
 st.markdown(f"""
-<div class="hero-row" style="display:flex;align-items:center;justify-content:space-between;padding:0.8rem 0 0.9rem 0;flex-wrap:wrap;gap:0.5rem;">
+<div class="hero-row" style="position:relative;display:flex;align-items:center;justify-content:center;padding:2.0rem 0 1.2rem 0;min-height:60px;">
     <div class="hero-left">
         <div class="hero-icon-wrap">
             <img src="{ICON_URI}" width="44" height="44" alt="TráfegoAI icon"/>
@@ -847,7 +847,6 @@ st.markdown(f"""
             <div class="hero-subtitle">Seu mentor de tr&aacute;fego pago</div>
         </div>
     </div>
-    <div id="status-badge-slot"></div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -912,7 +911,7 @@ _loading.empty()
 # Atualiza badge de status no header
 if error_msg:
     _status_placeholder.markdown(f"""
-    <div style="display:flex;justify-content:flex-end;">
+    <div style="display:flex;justify-content:flex-end;margin-top:-4.0rem;margin-bottom:0.5rem;">
         <div class="status-badge" style="background:rgba(239,68,68,0.08);border-color:rgba(239,68,68,0.2);">
             <div class="status-dot" style="background:#ef4444;box-shadow:0 0 8px #ef4444,0 0 16px #ef4444;animation:none;"></div>
             <span style="color:#f87171;">Offline</span>
@@ -921,7 +920,7 @@ if error_msg:
     """, unsafe_allow_html=True)
 else:
     _status_placeholder.markdown(f"""
-    <div style="display:flex;justify-content:flex-end;">
+    <div style="display:flex;justify-content:flex-end;margin-top:-4.0rem;margin-bottom:0.5rem;">
         <div class="status-badge">
             <div class="status-dot"></div>
             Online
